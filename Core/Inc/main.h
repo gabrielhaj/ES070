@@ -31,6 +31,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "encoder.h"
 
 /* USER CODE END Includes */
 
@@ -53,7 +54,7 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -86,10 +87,9 @@ void Error_Handler(void);
 #define LeftWheelEnc_GPIO_Port GPIOB
 #define RightWheelEnc_Pin GPIO_PIN_5
 #define RightWheelEnc_GPIO_Port GPIOB
-#define RightMotorIn3_Pin GPIO_PIN_7
-#define RightMotorIn3_GPIO_Port GPIOB
 #define LeftMotorIn2_Pin GPIO_PIN_9
 #define LeftMotorIn2_GPIO_Port GPIOB
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
