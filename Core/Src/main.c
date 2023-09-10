@@ -24,7 +24,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "encoder.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,7 +44,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+int a = 0;
+extern unsigned int uiVel;
+float fLeftPower = 0;
+float fRightPower = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -74,7 +77,6 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -87,11 +89,13 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_LPUART1_UART_Init();
-  MX_TIM1_Init();
-  MX_TIM16_Init();
   MX_TIM17_Init();
+  MX_TIM16_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-
+  vInitEncoders();
+  vMotorsInit(&htim1);
+  vMotorsStart();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -101,6 +105,14 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+	  fLeftPower = (float)a/100;
+
+	  vMotorsLeftWheelFoward();
+	  vMotorsLeftPower(fLeftPower);
+	  vMotorsRightWheelFoward();
+	  vMotorsRightPower(fLeftPower);
+
   }
   /* USER CODE END 3 */
 }
@@ -153,6 +165,13 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
+	vEncoderCallback(htim);
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
+	vEncoderOverflowCallback(htim);
+}
 /* USER CODE END 4 */
 
 /**
