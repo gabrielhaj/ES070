@@ -32,6 +32,7 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "encoder.h"
+#include "motors.h"
 
 /* USER CODE END Includes */
 
@@ -73,7 +74,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
 #define LD2_GPIO_Port GPIOA
 #define LeftMotorIn1_Pin GPIO_PIN_12
 #define LeftMotorIn1_GPIO_Port GPIOB
-#define LeftMotorIn1_EXTI_IRQn EXTI15_10_IRQn
 #define RightMotorIn4_Pin GPIO_PIN_10
 #define RightMotorIn4_GPIO_Port GPIOA
 #define RightMotorIn4_EXTI_IRQn EXTI15_10_IRQn
@@ -87,6 +87,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
 #define LeftWheelEnc_GPIO_Port GPIOB
 #define RightWheelEnc_Pin GPIO_PIN_5
 #define RightWheelEnc_GPIO_Port GPIOB
+#define RightMotorIn3_Pin GPIO_PIN_7
+#define RightMotorIn3_GPIO_Port GPIOB
 #define LeftMotorIn2_Pin GPIO_PIN_9
 #define LeftMotorIn2_GPIO_Port GPIOB
 
