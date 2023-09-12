@@ -87,7 +87,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
 #define LightSensor5_GPIO_Port GPIOA
 #define RightMotorIn4_Pin GPIO_PIN_10
 #define RightMotorIn4_GPIO_Port GPIOA
-#define RightMotorIn4_EXTI_IRQn EXTI15_10_IRQn
 #define T_SWDIO_Pin GPIO_PIN_13
 #define T_SWDIO_GPIO_Port GPIOA
 #define T_SWCLK_Pin GPIO_PIN_14

@@ -82,5 +82,5 @@ void VirarDireita() {
 }
 
 void Parar() {
-	vMotorsStop();
+	vMotorsBreak();
 }
