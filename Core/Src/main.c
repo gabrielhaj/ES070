@@ -25,6 +25,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "encoder.h"
+
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,6 +50,8 @@ int a = 0;
 extern unsigned int uiVel;
 float fLeftPower = 0;
 float fRightPower = 0;
+GPIO_PinState s[5];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -92,10 +96,12 @@ int main(void)
   MX_TIM17_Init();
   MX_TIM16_Init();
   MX_TIM1_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
   vInitEncoders();
   vMotorsInit(&htim1);
   vMotorsStart();
+  HAL_TIM_Base_Start_IT(&htim7);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -106,12 +112,8 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	  fLeftPower = (float)a/100;
 
-	  vMotorsLeftWheelFoward();
-	  vMotorsLeftPower(fLeftPower);
-	  vMotorsRightWheelFoward();
-	  vMotorsRightPower(fLeftPower);
+
 
   }
   /* USER CODE END 3 */
@@ -170,7 +172,13 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
-	vEncoderOverflowCallback(htim);
+	if(htim == &htim7) {
+		LineTracker();
+	} else {
+		vEncoderOverflowCallback(htim);
+	}
+
+
 }
 /* USER CODE END 4 */
 
