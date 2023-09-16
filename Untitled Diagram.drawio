@@ -1,9 +1,27 @@
-<mxfile host="app.diagrams.net" modified="2023-09-16T12:26:37.455Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/117.0" version="21.7.4" etag="qwKeNLVRyeoTRjx67Z2Q" type="github">
+<mxfile host="app.diagrams.net" modified="2023-09-16T12:39:54.635Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/117.0" etag="RPPp4FBXuNXYBC4co95w" version="21.7.4" type="github">
   <diagram name="Page-1" id="41xPmVqH5pH6I8MaSAvD">
-    <mxGraphModel>
+    <mxGraphModel dx="808" dy="483" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2339" pageHeight="3300" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="swVanfdS8o8AVJxVDRSn-1" value="" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="120" y="100" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="swVanfdS8o8AVJxVDRSn-2" value="" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="120" y="230" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="swVanfdS8o8AVJxVDRSn-3" value="&lt;div&gt;MICROCONTROLADOR&lt;/div&gt;&lt;div&gt;(STM32G474RE)&lt;br&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="330" y="180" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="swVanfdS8o8AVJxVDRSn-4" value="" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="600" y="220" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="swVanfdS8o8AVJxVDRSn-5" value="" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="120" y="360" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="swVanfdS8o8AVJxVDRSn-6" value="&lt;div&gt;BOTÕES DE CONFIGURAÇÃO&lt;/div&gt;&lt;div&gt;(1 ON/OFF MOTORES E 2 DE AJUSTE DE VELOCIDADE)&lt;br&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="120" y="100" width="100" height="100" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
