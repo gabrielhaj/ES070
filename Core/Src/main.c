@@ -48,6 +48,9 @@
 /* USER CODE BEGIN PV */
 int a = 0;
 extern unsigned int uiVel;
+extern encoderStruct xRightEncoder;
+extern encoderStruct xLeftEncoder;
+buttons xBt = {0};
 float fLeftPower = 0;
 float fRightPower = 0;
 GPIO_PinState s[5];
@@ -98,7 +101,7 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
-  vInitEncoders();
+  vInitEncoders(&htim16,&htim17);
   vMotorsInit(&htim1);
   vMotorsStart();
   HAL_TIM_Base_Start_IT(&htim7);
@@ -171,11 +174,25 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 	if(htim == &htim7) {
-		LineTracker();
-	} else {
+		vLineFollowerTracker(xLineSensorsGetState());
+	} else if(htim == (xLeftEncoder.htim || xRightEncoder.htim)) {
 		vEncoderOverflowCallback(htim);
 	}
 
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	xBt = xReadButtons();
+	if(xBt.enterBt) {
+
+	} else if(xBt.downBt) {
+
+	} else if(xBt.upBt) {
+
+	} else if(xBt.leftBt) {
+		vMotorsStop();
+	} else if(xBt.rightBt) {
+		vMotorsStart();
+	}
+}
 
 }
 /* USER CODE END 4 */

@@ -33,7 +33,9 @@ extern "C" {
 /* USER CODE BEGIN Includes */
 #include "encoder.h"
 #include "motors.h"
-#include "LineFollower.h"
+#include <lineFollower.h>
+#include "lineSensors.h"
+#include "buttons.h"
 
 /* USER CODE END Includes */
 
@@ -77,12 +79,24 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
 #define LD2_GPIO_Port GPIOA
 #define LightSensor2_Pin GPIO_PIN_6
 #define LightSensor2_GPIO_Port GPIOA
+#define EnterBt_Pin GPIO_PIN_5
+#define EnterBt_GPIO_Port GPIOC
+#define EnterBt_EXTI_IRQn EXTI9_5_IRQn
 #define LeftMotorIn1_Pin GPIO_PIN_12
 #define LeftMotorIn1_GPIO_Port GPIOB
 #define LightSensor3_Pin GPIO_PIN_13
 #define LightSensor3_GPIO_Port GPIOB
 #define LightSensor4_Pin GPIO_PIN_15
 #define LightSensor4_GPIO_Port GPIOB
+#define DownBt_Pin GPIO_PIN_7
+#define DownBt_GPIO_Port GPIOC
+#define DownBt_EXTI_IRQn EXTI9_5_IRQn
+#define LeftBt_Pin GPIO_PIN_8
+#define LeftBt_GPIO_Port GPIOC
+#define LeftBt_EXTI_IRQn EXTI9_5_IRQn
+#define RightBt_Pin GPIO_PIN_9
+#define RightBt_GPIO_Port GPIOC
+#define RightBt_EXTI_IRQn EXTI9_5_IRQn
 #define LightSensor5_Pin GPIO_PIN_9
 #define LightSensor5_GPIO_Port GPIOA
 #define RightMotorIn4_Pin GPIO_PIN_10
@@ -97,6 +111,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
 #define LeftWheelEnc_GPIO_Port GPIOB
 #define RightWheelEnc_Pin GPIO_PIN_5
 #define RightWheelEnc_GPIO_Port GPIOB
+#define UpBt_Pin GPIO_PIN_6
+#define UpBt_GPIO_Port GPIOB
+#define UpBt_EXTI_IRQn EXTI9_5_IRQn
 #define RightMotorIn3_Pin GPIO_PIN_7
 #define RightMotorIn3_GPIO_Port GPIOB
 #define LeftMotorIn2_Pin GPIO_PIN_9
