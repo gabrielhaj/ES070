@@ -46,14 +46,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-int a = 0;
-extern unsigned int uiVel;
 extern encoderStruct xRightEncoder;
 extern encoderStruct xLeftEncoder;
-buttons xBt = {0};
-float fLeftPower = 0;
-float fRightPower = 0;
-GPIO_PinState s[5];
+extern buttons xBt;
+
 
 /* USER CODE END PV */
 
@@ -103,8 +99,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   vInitEncoders(&htim16,&htim17);
   vMotorsInit(&htim1);
-  vMotorsStart();
-  HAL_TIM_Base_Start_IT(&htim7);
+  vLineFollowerInit(&htim7);
   /* USER CODE END 2 */
 
   /* Infinite loop */

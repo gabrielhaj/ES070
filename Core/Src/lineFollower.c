@@ -14,8 +14,10 @@ float fVsoft = 0.75;
 char cflag = 0;
 
 
-
-void vLineFollowerTracker(sensorsStateStruct xS) {
+void vLineFollowerInit(TIM_HandleTypeDef *htim){
+	HAL_TIM_Base_Start_IT(htim);
+}
+void vLineFollowerTracker(lineSensorsStateStruct xS) {
 	if(cflag && xS.mostRightSensor == white && xS.rightSensor == white && xS.middleSensor == white && xS.leftSensor == white && xS.mostLeftSensor == white) {
 		vLineFollowerStop();
 	} else if(!cflag && xS.mostRightSensor == white && xS.rightSensor == white && xS.middleSensor == white && xS.leftSensor == white && xS.mostLeftSensor == white) {

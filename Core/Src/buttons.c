@@ -8,6 +8,8 @@
 #include "main.h"
 #include "buttons.h"
 
+buttons xBt = {0};
+
 buttons xReadButtons() {
 	buttons xButtons = {0};
 	xButtons.leftBt = HAL_GPIO_ReadPin(LeftBt_GPIO_Port,LeftBt_Pin);

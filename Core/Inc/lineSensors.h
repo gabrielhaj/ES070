@@ -19,8 +19,8 @@ typedef struct {
 	color middleSensor;
 	color rightSensor;
 	color mostRightSensor;
-} sensorsStateStruct;
+} lineSensorsStateStruct;
 
-sensorsStateStruct xLineSensorsGetState();
+lineSensorsStateStruct xLineSensorsGetState();
 
 #endif /* INC_LINESENSORS_H_ */

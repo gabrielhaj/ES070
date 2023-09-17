@@ -9,8 +9,11 @@
 #define INC_LINEFOLLOWER_H_
 
 #include "lineSensors.h"
+#include "tim.h"
 
-void vLineFollowerTracker(sensorsStateStruct xS);
+void vLineFollowerInit(TIM_HandleTypeDef *htim);
+
+void vLineFollowerTracker(lineSensorsStateStruct xS);
 
 void vLineFollowerMoveFoward();
 
