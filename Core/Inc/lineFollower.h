@@ -15,7 +15,11 @@ void vLineFollowerInit(TIM_HandleTypeDef *htim);
 
 void vLineFollowerTracker(lineSensorsStateStruct xS);
 
-void vLineFollowerMoveFoward();
+void vLineFollowerMoveFoward(float fV);
+
+void vLineFollowerTurn(float fVleft, float fVright);
+
+void vLineFollowerMoveFowardSlow();
 
 void vLineFollowerTurnLeftSlow();
 
@@ -25,6 +29,11 @@ void vLineFollowerTurnLeft();
 
 void vLineFollowerTurnRight();
 
+void vLineFollowerSearchLeft();
+
+void vLineFollowerSearchRight();
+
 void vLineFollowerStop();
+
 
 #endif /* INC_LINEFOLLOWER_H_ */
