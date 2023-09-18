@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-09-18T00:03:50.847Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/117.0" etag="HkeNIr-e5yC-2LxSfHEb" version="21.7.5" type="github">
+<mxfile host="app.diagrams.net" modified="2023-09-18T00:20:40.085Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/117.0" etag="1C8foJdFUSDApYHO-9W3" version="21.7.5" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="1077" dy="1813" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -63,7 +63,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="e0Agd4xGflGSadxVDroM-11" value="Encoders" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="e0Agd4xGflGSadxVDroM-68" vertex="1">
-          <mxGeometry x="100" y="190" width="430" height="190" as="geometry">
+          <mxGeometry x="100" y="190" width="430" height="268" as="geometry">
             <mxRectangle x="550" y="140" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
@@ -76,17 +76,26 @@
         <mxCell id="e0Agd4xGflGSadxVDroM-19" value="+ unsigned long CLKFREQUENCY = 1000000" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="e0Agd4xGflGSadxVDroM-11" vertex="1">
           <mxGeometry y="78" width="430" height="26" as="geometry" />
         </mxCell>
+        <mxCell id="R5U1eeLYSOiUvF3rgZRd-8" value="+ unsigned char HOLESPERREVOLUTION = 20" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="e0Agd4xGflGSadxVDroM-11">
+          <mxGeometry y="104" width="430" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="R5U1eeLYSOiUvF3rgZRd-9" value="+ unsigned char WHEELRADIUS = 32.5*0.001" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="e0Agd4xGflGSadxVDroM-11">
+          <mxGeometry y="130" width="430" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="R5U1eeLYSOiUvF3rgZRd-10" value="+ unsigned char PI = 3.1415" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="e0Agd4xGflGSadxVDroM-11">
+          <mxGeometry y="156" width="430" height="26" as="geometry" />
+        </mxCell>
         <mxCell id="e0Agd4xGflGSadxVDroM-13" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="e0Agd4xGflGSadxVDroM-11" vertex="1">
-          <mxGeometry y="104" width="430" height="8" as="geometry" />
+          <mxGeometry y="182" width="430" height="8" as="geometry" />
         </mxCell>
         <mxCell id="e0Agd4xGflGSadxVDroM-14" value="+ void vInitEncoders(TIM_HandleTypeDef *htim1, TIM_HandleTypeDef *htim2)" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="e0Agd4xGflGSadxVDroM-11" vertex="1">
-          <mxGeometry y="112" width="430" height="26" as="geometry" />
+          <mxGeometry y="190" width="430" height="26" as="geometry" />
         </mxCell>
         <mxCell id="e0Agd4xGflGSadxVDroM-20" value="+ void vEncoderCallback(TIM_HandleTypeDef *htim)" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="e0Agd4xGflGSadxVDroM-11" vertex="1">
-          <mxGeometry y="138" width="430" height="26" as="geometry" />
+          <mxGeometry y="216" width="430" height="26" as="geometry" />
         </mxCell>
         <mxCell id="e0Agd4xGflGSadxVDroM-21" value="+ void vEncoderOverflowCallback(TIM_HandleTypeDef *htim)" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="e0Agd4xGflGSadxVDroM-11" vertex="1">
-          <mxGeometry y="164" width="430" height="26" as="geometry" />
+          <mxGeometry y="242" width="430" height="26" as="geometry" />
         </mxCell>
         <mxCell id="e0Agd4xGflGSadxVDroM-24" value="&lt;&lt;struct&gt;&gt;&#xa; encoderStruct" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="e0Agd4xGflGSadxVDroM-68" vertex="1">
           <mxGeometry x="235" y="460" width="160" height="272" as="geometry">
