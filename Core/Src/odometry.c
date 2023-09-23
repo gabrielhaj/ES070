@@ -7,6 +7,7 @@
 
 #include "encoder.h"
 #include "math.h"
+#include "odometry.h"
 
 #define DISTANCEBETWEENWHEELS (13*0.01)
 #define WHEELRADIUS (32.5*0.001)
