@@ -11,6 +11,9 @@
 #define IDLE   0
 #define DONE   1
 #define CLKFREQUENCY  1000000UL
+#define HOLESPERREVOLUTION 20
+#define WHEELRADIUS (32.5*0.001)
+#define PI 3.1415
 
 encoderStruct xLeftEncoder = {0};
 encoderStruct xRightEncoder = {0};
@@ -46,9 +49,9 @@ void vEncoderCallback(TIM_HandleTypeDef* htim) {
     	        //close between each other. But for sure this is not the "correct"
     	        //way to solve this problem
     	        if(xLeftEncoder.iTicks > 1 ) {
-    	        	xLeftEncoder.uiFreq = (unsigned int)(CLKFREQUENCY/xLeftEncoder.iTicks);
+    	        	xLeftEncoder.dFreq = (double)(CLKFREQUENCY/xLeftEncoder.iTicks);
     	        }
-    	        xLeftEncoder.uiVel = xLeftEncoder.uiFreq*60/20;
+    	        xLeftEncoder.dVel = xLeftEncoder.dFreq*2*PI/HOLESPERREVOLUTION;
     	        xLeftEncoder.ucState = IDLE;
     	    }
     } else if (htim == xRightEncoder.htim) {
@@ -70,9 +73,9 @@ void vEncoderCallback(TIM_HandleTypeDef* htim) {
     	        //close between each other. But for sure this is not the "correct"
     	        //way to solve this problem
     	        if(xRightEncoder.iTicks > 1 ) {
-    	        	xRightEncoder.uiFreq = (unsigned int)(CLKFREQUENCY/xRightEncoder.iTicks);
+    	        	xRightEncoder.dFreq = (double)(CLKFREQUENCY/xRightEncoder.iTicks);
     	        }
-    	        xRightEncoder.uiVel = xRightEncoder.uiFreq*60/20;
+    	        xRightEncoder.dVel = xRightEncoder.dFreq*2*PI/HOLESPERREVOLUTION;  //m/s
     	        xRightEncoder.ucState = IDLE;
     	    }
     }
@@ -85,3 +88,12 @@ void vEncoderOverflowCallback(TIM_HandleTypeDef* htim) {
 		xRightEncoder.uiTIM_OVC++;
 	}
 }
+
+double dEncoderGetLeftWheelVelocity(){
+	return xLeftEncoder.dVel;
+}
+
+double dEncoderGetRightWheelVelocity(){
+	return xRightEncoder.dVel;
+}
+
