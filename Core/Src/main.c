@@ -49,6 +49,10 @@
 extern encoderStruct xRightEncoder;
 extern encoderStruct xLeftEncoder;
 extern buttons xBt;
+extern positionStruct xPosition;
+extern TIM_HandleTypeDef *pOdometryTIM;
+extern TIM_HandleTypeDef *pLineFollowerTIM;
+extern int iOdometryClockDivision;
 
 
 /* USER CODE END PV */
@@ -96,10 +100,12 @@ int main(void)
   MX_TIM16_Init();
   MX_TIM1_Init();
   MX_TIM7_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
   vInitEncoders(&htim16,&htim17);
   vMotorsInit(&htim1);
   vLineFollowerInit(&htim7);
+  vOdometryInit(&htim6, iOdometryClockDivision);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -168,10 +174,12 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
-	if(htim == &htim7) {
+	if(htim == pLineFollowerTIM) {
 		vLineFollowerTracker(xLineSensorsGetState());
 	} else if(htim == (xLeftEncoder.htim || xRightEncoder.htim)) {
 		vEncoderOverflowCallback(htim);
+	} else if(htim == pOdometryTIM) {
+		vOdometryUpdateCurrentStatus(xPosition);
 	}
 }
 

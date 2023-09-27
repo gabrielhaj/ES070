@@ -16,8 +16,10 @@ typedef struct {
 	double dTravelledDistance;
 	double dActualVelocity;
 	double dMeanVelocity;
+	int iTimeCounter;
 } positionStruct;
 
+void vOdometryInit(TIM_HandleTypeDef* htim, int iClockDivision);
 void vOdometryUpdateCurrentStatus(positionStruct xPosition);
 
 #endif /* INC_ODOMETRY_H_ */

@@ -16,11 +16,13 @@ float fVsoft = 0.75;
 char cflag = 0;
 unsigned char ucFollowerState = 0;
 unsigned char ucFollowerCounter = 0;
+TIM_HandleTypeDef *pLineFollowerTIM;
 
 
 
 void vLineFollowerInit(TIM_HandleTypeDef *htim){
-	HAL_TIM_Base_Start_IT(htim);
+	pLineFollowerTIM = htim;
+	HAL_TIM_Base_Start_IT(pLineFollowerTIM);
 }
 void vLineFollowerTracker(lineSensorsStateStruct xS) {
 	if(cflag && xS.mostRightSensor == white && xS.rightSensor == white && xS.middleSensor == white && xS.leftSensor == white && xS.mostLeftSensor == white) {
