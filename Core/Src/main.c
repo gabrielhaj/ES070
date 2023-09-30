@@ -106,6 +106,7 @@ int main(void)
   vMotorsInit(&htim1);
   vLineFollowerInit(&htim7);
   vOdometryInit(&htim6, iOdometryClockDivision);
+  pid_init(0.25, 0.05, 0, 0, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -175,7 +176,8 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 	if(htim == pLineFollowerTIM) {
-		vLineFollowerTracker(xLineSensorsGetState());
+		//vLineFollowerTracker(xLineSensorsGetState());
+		vPIDActuatorSetValue(pidUpdateData());
 	} else if(htim == (xLeftEncoder.htim || xRightEncoder.htim)) {
 		vEncoderOverflowCallback(htim);
 	} else if(htim == pOdometryTIM) {

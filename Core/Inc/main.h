@@ -37,6 +37,7 @@ extern "C" {
 #include "lineSensors.h"
 #include "buttons.h"
 #include "odometry.h"
+#include "pid.h"
 
 /* USER CODE END Includes */
 
