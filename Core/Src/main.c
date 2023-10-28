@@ -25,6 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "encoder.h"
+#include "ultraSonicSensor.h"
 
 
 /* USER CODE END Includes */
@@ -53,7 +54,8 @@ extern positionStruct xPosition;
 extern TIM_HandleTypeDef *pOdometryTIM;
 extern TIM_HandleTypeDef *pLineFollowerTIM;
 extern int iOdometryClockDivision;
-
+extern ultraSonicSensorStruct xUltraSonicSensor;
+extern TIM_HandleTypeDef *pUltraSonicTriggerCallback;
 
 /* USER CODE END PV */
 
@@ -101,12 +103,15 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM7_Init();
   MX_TIM6_Init();
+  MX_TIM3_Init();
+  MX_TIM20_Init();
   /* USER CODE BEGIN 2 */
   vInitEncoders(&htim16,&htim17);
   vMotorsInit(&htim1);
   vLineFollowerInit(&htim7);
   vOdometryInit(&htim6, iOdometryClockDivision);
   pid_init(0.25, 0.05, 0, 0, 1);
+  vUltrasonicSensorInit(&htim3); // frontal
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -171,7 +176,12 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
-	vEncoderCallback(htim);
+	if(htim == xRightEncoder.htim || htim == xLeftEncoder.htim){
+		vEncoderCallback(htim);
+	}
+	else if(htim == xUltraSonicSensor.htim){
+		vUltraSonicSensorCallback(htim);
+	}
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
@@ -182,6 +192,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 		vEncoderOverflowCallback(htim);
 	} else if(htim == pOdometryTIM) {
 		vOdometryUpdateCurrentStatus(xPosition);
+	} else if(htim == xUltraSonicSensor.htim) {
+
+	} else if(htim == pUltraSonicTriggerCallback) {
+		vUltrasonicSensorSendTriggerPulse();
 	}
 }
 
