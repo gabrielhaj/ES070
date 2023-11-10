@@ -7,7 +7,7 @@
 
 #ifndef INC_ULTRASONICSENSOR_H_
 #define INC_ULTRASONICSENSOR_H_
-#define VELOCIDADESOM 0.0343 // [cm/s]
+#define VELOCIDADESOM 0.0343 // [cm/us]
 
 #include "tim.h"
 typedef struct {
@@ -15,7 +15,7 @@ typedef struct {
 	volatile uint32_t uiSendTime;
 	volatile uint32_t uiReceiveTime;
 	unsigned int uiOVC;
-	float fDistance;
+	double dDistance;
 } ultraSonicSensorStruct;
 
 
@@ -25,10 +25,10 @@ typedef struct {
 void vUltrasonicSensorInit(TIM_HandleTypeDef *htim);
 
 /* Envia um pulso */
-void vUltrasonicSensorSendTriggerPulse(void);
+void vUltrasonicSensorSendTriggerPulse(TIM_HandleTypeDef* htim);
 
 /* Retorna a distância de um sensor */
-float fUltrasonicSensorGetDistanceCm(ultraSonicSensorStruct xUltraSonicSensor);
+double fUltrasonicSensorGetDistanceCm(ultraSonicSensorStruct xUltraSonicSensor);
 
 /* Callback do tempo */
 void vUltraSonicSensorCallback(TIM_HandleTypeDef *htim);

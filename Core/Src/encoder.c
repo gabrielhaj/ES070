@@ -19,7 +19,7 @@ encoderStruct xLeftEncoder = {0};
 encoderStruct xRightEncoder = {0};
 
 
-void vInitEncoders(TIM_HandleTypeDef* htim1, TIM_HandleTypeDef* htim2) {
+void vInitEncoders(TIM_HandleTypeDef *htim1, TIM_HandleTypeDef *htim2) {
 	xLeftEncoder.htim = htim1;
 	xRightEncoder.htim = htim2;
     HAL_TIM_Base_Start_IT(htim1);

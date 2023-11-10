@@ -73,6 +73,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
 #define RightMotorPWM_GPIO_Port GPIOC
 #define LightSensor1_Pin GPIO_PIN_0
 #define LightSensor1_GPIO_Port GPIOA
+#define Frontal_SW_Pin GPIO_PIN_1
+#define Frontal_SW_GPIO_Port GPIOA
+#define Frontal_SW_EXTI_IRQn EXTI1_IRQn
 #define LPUART1_TX_Pin GPIO_PIN_2
 #define LPUART1_TX_GPIO_Port GPIOA
 #define LPUART1_RX_Pin GPIO_PIN_3
@@ -84,12 +87,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
 #define EnterBt_Pin GPIO_PIN_5
 #define EnterBt_GPIO_Port GPIOC
 #define EnterBt_EXTI_IRQn EXTI9_5_IRQn
+#define Ultra_All_Trig_PWM_Pin GPIO_PIN_2
+#define Ultra_All_Trig_PWM_GPIO_Port GPIOB
 #define LeftMotorIn1_Pin GPIO_PIN_12
 #define LeftMotorIn1_GPIO_Port GPIOB
 #define LightSensor3_Pin GPIO_PIN_13
 #define LightSensor3_GPIO_Port GPIOB
 #define LightSensor4_Pin GPIO_PIN_15
 #define LightSensor4_GPIO_Port GPIOB
+#define Ultra_Fr_Eco_TIM_Pin GPIO_PIN_6
+#define Ultra_Fr_Eco_TIM_GPIO_Port GPIOC
 #define DownBt_Pin GPIO_PIN_7
 #define DownBt_GPIO_Port GPIOC
 #define DownBt_EXTI_IRQn EXTI9_5_IRQn

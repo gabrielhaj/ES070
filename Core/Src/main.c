@@ -26,6 +26,7 @@
 /* USER CODE BEGIN Includes */
 #include "encoder.h"
 #include "ultraSonicSensor.h"
+#include "FrontalSW.h"
 
 
 /* USER CODE END Includes */
@@ -50,6 +51,7 @@
 extern encoderStruct xRightEncoder;
 extern encoderStruct xLeftEncoder;
 extern buttons xBt;
+extern GPIO_PinState SW;
 extern positionStruct xPosition;
 extern TIM_HandleTypeDef *pOdometryTIM;
 extern TIM_HandleTypeDef *pLineFollowerTIM;
@@ -105,6 +107,7 @@ int main(void)
   MX_TIM6_Init();
   MX_TIM3_Init();
   MX_TIM20_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   vInitEncoders(&htim16,&htim17);
   vMotorsInit(&htim1);
@@ -121,8 +124,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
-
   }
   /* USER CODE END 3 */
 }
@@ -181,6 +182,9 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 	}
 	else if(htim == xUltraSonicSensor.htim){
 		vUltraSonicSensorCallback(htim);
+		if (xUltraSonicSensor.dDistance < 2) {
+			vMotorsStop();
+		}
 	}
 }
 
@@ -188,20 +192,23 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 	if(htim == pLineFollowerTIM) {
 		//vLineFollowerTracker(xLineSensorsGetState());
 		vPIDActuatorSetValue(pidUpdateData());
-	} else if(htim == (xLeftEncoder.htim || xRightEncoder.htim)) {
+	} else if(htim == xLeftEncoder.htim || htim == xRightEncoder.htim) {
 		vEncoderOverflowCallback(htim);
 	} else if(htim == pOdometryTIM) {
 		vOdometryUpdateCurrentStatus(xPosition);
 	} else if(htim == xUltraSonicSensor.htim) {
-
+		vUltraSonicSensorOverclockCallback(htim);
 	} else if(htim == pUltraSonicTriggerCallback) {
-		vUltrasonicSensorSendTriggerPulse();
+		//vUltrasonicSensorSendTriggerPulse(htim);
 	}
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	xBt = xReadButtons();
-	if(xBt.enterBt) {
+	SW = SWRead();
+	if (SW) {
+		vMotorsStop();
+	}else if(xBt.enterBt) {
 
 	} else if(xBt.downBt) {
 
