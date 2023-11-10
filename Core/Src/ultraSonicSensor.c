@@ -65,7 +65,7 @@ void vUltraSonicSensorCallback(TIM_HandleTypeDef *htim) {
 		//vUltrasonicSensorSendTriggerPulse(htim);
 	} else {
 		xUltraSonicSensor.uiReceiveTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1); // tempo final
-		//TIM3->CNT = 0;
+	    __HAL_TIM_SET_COUNTER(&htim3, 0);
 		xUltraSonicSensor.dDistance = fUltrasonicSensorGetDistanceCm(xUltraSonicSensor);
 		cFlag = 0;
 		//vUltrasonicSensorSendTriggerPulse(htim);
