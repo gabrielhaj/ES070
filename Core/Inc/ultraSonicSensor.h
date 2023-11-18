@@ -28,7 +28,7 @@ void vUltrasonicSensorInit(TIM_HandleTypeDef *htim);
 void vUltrasonicSensorSendTriggerPulse(TIM_HandleTypeDef* htim);
 
 /* Retorna a distância de um sensor */
-double fUltrasonicSensorGetDistanceCm(ultraSonicSensorStruct xUltraSonicSensor);
+double dUltrasonicSensorGetDistanceCm(ultraSonicSensorStruct xUltraSonicSensor);
 
 /* Callback do tempo */
 void vUltraSonicSensorCallback(TIM_HandleTypeDef *htim);

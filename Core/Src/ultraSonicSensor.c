@@ -8,11 +8,12 @@
 
 #include "ultraSonicSensor.h"
 
+char cFlag = 0; //
 ultraSonicSensorStruct xUltraSonicSensor = {0};
-char cFlag = 0;
-char cFlag1 = 0;
 TIM_HandleTypeDef *pUltraSonicTriggerCallback;
 TIM_HandleTypeDef *pPWMTrigger = &htim20;
+
+//char cFlag1 = 0; // trigger setado?
 
 /* Inicializa o sensor ultrassônico */
 void vUltrasonicSensorInit(TIM_HandleTypeDef *htim) {
@@ -24,10 +25,12 @@ void vUltrasonicSensorInit(TIM_HandleTypeDef *htim) {
     HAL_TIM_IC_Start_IT(xUltraSonicSensor.htim, TIM_CHANNEL_1);
     __HAL_TIM_SET_COUNTER(&htim3, 0);
 	HAL_TIM_PWM_Start(pPWMTrigger,TIM_CHANNEL_1);
-	pPWMTrigger->Instance->CCR1 = 10;
+	pPWMTrigger->Instance->CCR1 = 1;
+
 }
 
-/* Envia um pulso */
+/*
+// /* Envia um pulso
 void vUltrasonicSensorSendTriggerPulse(TIM_HandleTypeDef* htim) {
     if(cFlag1 == 1) {
     	HAL_GPIO_WritePin(GPIOB, Ultra_All_Trig_PWM_Pin, GPIO_PIN_RESET); // Volte o pino TRIGGER para nível baixo
@@ -41,9 +44,10 @@ void vUltrasonicSensorSendTriggerPulse(TIM_HandleTypeDef* htim) {
     }
 
 }
+*/
 
 /* Retorna a distância de um sensor (em cm) */
-double fUltrasonicSensorGetDistanceCm(ultraSonicSensorStruct xUltraSonicSensor) {
+double dUltrasonicSensorGetDistanceCm(ultraSonicSensorStruct xUltraSonicSensor) {
 	uint32_t uiEchoDuration = 0;
 	double dDistanceCm = 0;
 	uiEchoDuration = (xUltraSonicSensor.uiReceiveTime + (xUltraSonicSensor.uiOVC*65536) - xUltraSonicSensor.uiSendTime);
@@ -66,7 +70,7 @@ void vUltraSonicSensorCallback(TIM_HandleTypeDef *htim) {
 	} else {
 		xUltraSonicSensor.uiReceiveTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1); // tempo final
 	    __HAL_TIM_SET_COUNTER(&htim3, 0);
-		xUltraSonicSensor.dDistance = fUltrasonicSensorGetDistanceCm(xUltraSonicSensor);
+		xUltraSonicSensor.dDistance = dUltrasonicSensorGetDistanceCm(xUltraSonicSensor);
 		cFlag = 0;
 		//vUltrasonicSensorSendTriggerPulse(htim);
 
