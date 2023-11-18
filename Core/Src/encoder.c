@@ -17,6 +17,8 @@
 
 encoderStruct xLeftEncoder = {0};
 encoderStruct xRightEncoder = {0};
+extern unsigned char ucLeftMotorState;
+extern unsigned char ucRightMotorState;
 
 
 void vInitEncoders(TIM_HandleTypeDef *htim1, TIM_HandleTypeDef *htim2) {
@@ -51,7 +53,7 @@ void vEncoderCallback(TIM_HandleTypeDef* htim) {
     	        if(xLeftEncoder.iTicks > 1 ) {
     	        	xLeftEncoder.dFreq = (double)(CLKFREQUENCY/xLeftEncoder.iTicks);
     	        }
-    	        xLeftEncoder.dVel = xLeftEncoder.dFreq*2*PI/HOLESPERREVOLUTION;
+    	        xLeftEncoder.dVel = xLeftEncoder.dFreq*2*WHEELRADIUS*PI/HOLESPERREVOLUTION;
     	        xLeftEncoder.ucState = IDLE;
     	    }
     } else if (htim == xRightEncoder.htim) {
@@ -75,7 +77,7 @@ void vEncoderCallback(TIM_HandleTypeDef* htim) {
     	        if(xRightEncoder.iTicks > 1 ) {
     	        	xRightEncoder.dFreq = (double)(CLKFREQUENCY/xRightEncoder.iTicks);
     	        }
-    	        xRightEncoder.dVel = xRightEncoder.dFreq*2*PI/HOLESPERREVOLUTION;  //m/s
+    	        xRightEncoder.dVel = xRightEncoder.dFreq*2*WHEELRADIUS*PI/HOLESPERREVOLUTION;  //m/s
     	        xRightEncoder.ucState = IDLE;
     	    }
     }
@@ -90,10 +92,16 @@ void vEncoderOverflowCallback(TIM_HandleTypeDef* htim) {
 }
 
 double dEncoderGetLeftWheelVelocity(){
+	if(ucLeftMotorState == 0) {
+		xLeftEncoder.dVel = 0;
+	}
 	return xLeftEncoder.dVel;
 }
 
 double dEncoderGetRightWheelVelocity(){
+	if(ucRightMotorState == 0) {
+		xRightEncoder.dVel = 0;
+	}
 	return xRightEncoder.dVel;
 }
 

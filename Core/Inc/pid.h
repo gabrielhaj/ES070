@@ -1,13 +1,3 @@
-/*
- * pid.h
- *
- *  Created on: Sep 29, 2023
- *      Author: aluno
- */
-
-#ifndef INC_PID_H_
-#define INC_PID_H_
-
 /* ***************************************************************** */
 /* File name:        pid.h                                           */
 /* File description: Header file containing the functions/methods    */
@@ -17,6 +7,8 @@
 /* Revision date:    21mai2023                                       */
 /* ***************************************************************** */
 
+#ifndef SOURCES_CONTROLLER_PID_H_
+#define SOURCES_CONTROLLER_PID_H_
 
 #define UPDATE_RATE_MS      100
 #define INTEGRATOR_MAX_SIZE 100
@@ -126,14 +118,13 @@ unsigned short pid_getIntegratorWindow (void);
 /*                     control reference              */
 /* Output params:      float: New Control effort     */
 /* ************************************************** */
-float pidUpdateData();
+float pidUpdateData(float fSensorValue, float fReferenceValue);
 
 void vPIDPeriodicControlTask();
 float fPIDGetSetPointTemperature();
-void vPIDActuatorSetValue(float fActuatorValue);
-int iPIDGetLineSensor();
+void vPIDRightActuatorSetValue(float fActuatorValue);
+void vPIDLeftActuatorSetValue(float fActuatorValue);
 
 
 
-
-#endif /* INC_PID_H_ */
+#endif /* SOURCES_CONTROLLER_PID_H_ */

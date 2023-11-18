@@ -1,9 +1,3 @@
-/*
- * pid.c
- *
- *  Created on: Sep 29, 2023
- *      Author: aluno
- */
 /* ***************************************************************** */
 /* File name:        pid.c                                           */
 /* File description: This file has a couple of useful functions to   */
@@ -15,8 +9,6 @@
 
 #include "pid.h"
 #include "main.h"
-#include "lineSensors.h"
-#include "motors.h"
 
 
 // Struct used to store the PID configuration parameters
@@ -29,7 +21,6 @@ float fIntegratorBuffer[INTEGRATOR_MAX_SIZE]={0};
 float fError, fDifference, fOut;
 
 extern float fSetPointTemperature;
-
 
 /* ************************************************ */
 /* Method name:        pid_init                     */
@@ -170,20 +161,12 @@ unsigned short pid_getIntegratorWindow (void)
 /*                     control reference              */
 /* Output params:      float: New Control effort     */
 /* ************************************************** */
-float pidUpdateData()
+float pidUpdateData(float fSensorValue, float fSetValue)
 {
-	//float fError, fDifference, fOut, fPosition;
+	//float fError, fDifference, fOut;
 
 	// Proportional error
-	/*
-	if(iPIDGetLineSensor() != 10) {
-		fError = iPIDGetLineSensor();
-	}
-	*/
-	if(iPIDGetLineSensor() != 10){
-		fError = iPIDGetLineSensor();
-	}
-
+	fError = fSetValue - fSensorValue;
 
 	//Ingtegral error
 	pidConfig.fError_sum = pidConfig.fError_sum - fIntegratorBuffer[usIntegratorCount] + fError;
@@ -212,37 +195,20 @@ float pidUpdateData()
 	{
 		fOut = -pidConfig.fOutputSaturation;
 	}
-	//fError -= fOut;
+
 	return fOut;
 }
 
-void vPIDActuatorSetValue(float fActuatorValue) {
-	vMotorsLeftWheelFoward();
-	vMotorsRightWheelFoward();
-	vMotorsRightPower(0.6 - fActuatorValue);
-	vMotorsLeftPower(0.6 + fActuatorValue);
+float fPIDGetSetPointTemperature() {
+	return fSetPointTemperature;
 }
 
+void vPIDLeftActuatorSetValue(float fActuatorValue) {
+	vMotorsLeftPower(fActuatorValue);
+}
 
-
-int iPIDGetLineSensor() {
-	lineSensorsStateStruct xS = {0};
-	int iValue = 10;
-	xS = xLineSensorsGetState();
-	if(xS.mostLeftSensor) {
-		iValue = -2;
-	} else if(xS.leftSensor) {
-		iValue = -1;
-	} else if(xS.middleSensor) {
-		iValue = 0;
-	} else if(xS.rightSensor) {
-		iValue = 1;
-	} else if(xS.mostRightSensor) {
-		iValue = 2;
-	}
-	return iValue;
+void vPIDRightActuatorSetValue(float fActuatorValue) {
+	vMotorsRightPower(fActuatorValue);
 }
 
 __weak void vPIDPeriodicControlTask() {}
-
-

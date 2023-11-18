@@ -9,6 +9,8 @@
 #include "main.h"
 
 TIM_HandleTypeDef *pPWMMotors;
+extern unsigned char ucRightMotorState;
+extern unsigned char ucLeftMotorState;
 
 void vMotorsInit(TIM_HandleTypeDef *htim) {
 	pPWMMotors = htim;
@@ -19,11 +21,15 @@ void vMotorsStart() {
 	HAL_TIM_PWM_Start(pPWMMotors,TIM_CHANNEL_2);
 	pPWMMotors->Instance->CCR1 = 0;
 	pPWMMotors->Instance->CCR2 = 0;
+	ucLeftMotorState = 1;
+	ucRightMotorState = 1;
 }
 
 void vMotorsStop() {
 	HAL_TIM_PWM_Stop(pPWMMotors,TIM_CHANNEL_1);
+	ucLeftMotorState = 0;
 	HAL_TIM_PWM_Stop(pPWMMotors,TIM_CHANNEL_2);
+	ucRightMotorState = 0;
 }
 
 void vMotorsLeftPower(float fLeftPower){
