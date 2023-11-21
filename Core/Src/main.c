@@ -52,6 +52,7 @@ extern encoderStruct xRightEncoder;
 extern encoderStruct xLeftEncoder;
 extern buttons xBt;
 extern GPIO_PinState SW;
+lineSensorsStateStruct xS = {0};
 positionStruct xPosition = {0};
 extern TIM_HandleTypeDef *pOdometryTIM;
 extern TIM_HandleTypeDef *pLineFollowerTIM;
@@ -60,9 +61,8 @@ extern TIM_HandleTypeDef *pUltraSonicTriggerCallback;
 unsigned char ucLcdAddress = 0x27;
 unsigned char ucLeftMotorState = 0;
 unsigned char ucRightMotorState = 0;
-float fSetPoint = 0.7;
-float fLeftActualPower = 0;
-float fRightActualPower = 0;
+float fVelSetPoint = 0.7;
+
 
 /* USER CODE END PV */
 
@@ -194,10 +194,8 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 	if(htim == pLineFollowerTIM) {
 		//vLineFollowerTracker(xLineSensorsGetState());
-		fLeftActualPower += pidUpdateData(xLeftEncoder.dVel, fSetPoint);
-		vPIDLeftActuatorSetValue(fLeftActualPower);
-		fRightActualPower += pidUpdateData(xRightEncoder.dVel, fSetPoint);
-		vPIDRightActuatorSetValue(fRightActualPower);
+		xS = xLineSensorsGetState();
+		vPIDMotorsOutput();
 	} else if(htim == xLeftEncoder.htim || htim == xRightEncoder.htim) {
 		vEncoderOverflowCallback(htim);
 	} else if(htim == pOdometryTIM) {

@@ -8,6 +8,8 @@
 #include "lineSensors.h"
 #include "main.h"
 
+
+
 lineSensorsStateStruct xLineSensorsGetState() {
 	lineSensorsStateStruct xS = {0};
 	xS.mostLeftSensor = HAL_GPIO_ReadPin(LightSensor1_GPIO_Port,LightSensor1_Pin);

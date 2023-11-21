@@ -122,8 +122,7 @@ float pidUpdateData(float fSensorValue, float fReferenceValue);
 
 void vPIDPeriodicControlTask();
 float fPIDGetSetPointTemperature();
-void vPIDRightActuatorSetValue(float fActuatorValue);
-void vPIDLeftActuatorSetValue(float fActuatorValue);
+void vPIDMotorsOutput();
 
 
 

@@ -20,7 +20,15 @@ float fIntegratorBuffer[INTEGRATOR_MAX_SIZE]={0};
 
 float fError, fDifference, fOut;
 
+extern float fVelSetPoint;
+float fLeftSetPoint = 0;
+float fRightSetPoint = 0;
+float fLeftActualPower = 0;
+float fRightActualPower = 0;
+
 extern float fSetPointTemperature;
+extern encoderStruct xRightEncoder;
+extern encoderStruct xLeftEncoder;
 
 /* ************************************************ */
 /* Method name:        pid_init                     */
@@ -199,16 +207,11 @@ float pidUpdateData(float fSensorValue, float fSetValue)
 	return fOut;
 }
 
-float fPIDGetSetPointTemperature() {
-	return fSetPointTemperature;
-}
-
-void vPIDLeftActuatorSetValue(float fActuatorValue) {
-	vMotorsLeftPower(fActuatorValue);
-}
-
-void vPIDRightActuatorSetValue(float fActuatorValue) {
-	vMotorsRightPower(fActuatorValue);
+void vPIDMotorsOutput() {
+	fLeftActualPower += pidUpdateData(xLeftEncoder.dVel, fLeftSetPoint);
+	vMotorsLeftPower(fLeftActualPower);
+	fRightActualPower += pidUpdateData(xRightEncoder.dVel, fRightSetPoint);
+	vMotorsRightPower(fRightActualPower);
 }
 
 __weak void vPIDPeriodicControlTask() {}

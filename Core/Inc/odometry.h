@@ -21,5 +21,6 @@ typedef struct {
 
 void vOdometryInit(TIM_HandleTypeDef* htim, int iClockDivision);
 void vOdometryUpdateCurrentStatus();
+float vOdometryInverseKinematics(float fOrientation, float fVelSetPoint);
 
 #endif /* INC_ODOMETRY_H_ */

@@ -9,13 +9,19 @@
 #include "motors.h"
 #include "lineSensors.h"
 
+#define PI 3.1415
 #define MAX_FOLLOWER_COUNTER 5
+#define SENSORANGLE 30 //degrees
 
 float fVmax = 1;
 float fVsoft = 0.75;
 char cflag = 0;
 unsigned char ucFollowerState = 0;
 unsigned char ucFollowerCounter = 0;
+float fOrientationChange = 0;
+extern float fVelSetPoint;
+extern float fLeftSetPoint;
+extern float fRightSetPoint;
 TIM_HandleTypeDef *pLineFollowerTIM;
 
 
@@ -121,3 +127,30 @@ void vLineFollowerSearchRight() {
 void vLineFollowerStop() {
 	vMotorsBreak();
 }
+
+void vLineFollowerNewTracker(lineSensorsStateStruct xS) {
+	if(xS.leftSensor == white && xS.mostLeftSensor == white && xS.rightSensor == white && xS.mostRightSensor == white && xS.middleSensor == white ) {
+		fOrientationChange = 0;
+		fVelSetPoint = 0;
+		vOdometryInverseKinematics(fOrientationChange, fVelSetPoint);
+	} else if(xS.mostLeftSensor == white) {
+		fOrientationChange = 2*(PI/180)*SENSORANGLE;
+		vOdometryInverseKinematics(fOrientationChange, fVelSetPoint);
+	} else if(xS.mostRightSensor == white) {
+		fOrientationChange = -2*(PI/180)*SENSORANGLE;
+		vOdometryInverseKinematics(fOrientationChange, fVelSetPoint);
+	} else if(xS.leftSensor == white) {
+		fOrientationChange = (PI/180)*SENSORANGLE;
+		vOdometryInverseKinematics(fOrientationChange, fVelSetPoint);
+	} else if(xS.rightSensor == white) {
+		fOrientationChange = -1*(PI/180)*SENSORANGLE;
+		vOdometryInverseKinematics(fOrientationChange, fVelSetPoint);
+	} else if(xS.middleSensor == white) {
+		fOrientationChange = 0;
+		vOdometryInverseKinematics(fOrientationChange, fVelSetPoint);
+	} else {
+		//to-do
+		//Aqui seria uma questão de subtrair da orientação o quanto que se variou nela entre uma interrupção e outra
+	}
+}
+

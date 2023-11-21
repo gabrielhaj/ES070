@@ -11,7 +11,10 @@
 
 #define DISTANCEBETWEENWHEELS (13*0.01)
 #define WHEELRADIUS (32.5*0.001)
+#define DISTANCETOSENSORS 10 //Definir a distância do centro do carro até os sensores, aproximadamente.
 extern positionStruct xPosition;
+extern float fLeftSetPoint;
+extern float fRightSetPoint;
 int iOdometryClockDivision = 9999; //TIM6 is already divided by 17000. That results in a 10000 Hz freq.
 //Thus, for a 1 Hz operation, we should divide by 10000;
 
@@ -46,3 +49,7 @@ void vOdometryUpdateCurrentStatus(){
 
 }
 
+float vOdometryInverseKinematics(float fOrientationChange, float fVelSetPoint) {
+	fLeftSetPoint = fVelSetPoint*(1 - (DISTANCEBETWEENWHEELS/2)*fOrientationChange/DISTANCETOSENSORS);
+	fRightSetPoint = fVelSetPoint*(1 + (DISTANCEBETWEENWHEELS/2)*fOrientationChange/DISTANCETOSENSORS);
+}
