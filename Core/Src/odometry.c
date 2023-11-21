@@ -49,7 +49,7 @@ void vOdometryUpdateCurrentStatus(){
 
 }
 
-float vOdometryInverseKinematics(float fOrientationChange, float fVelSetPoint) {
-	fLeftSetPoint = fVelSetPoint*(1 - (DISTANCEBETWEENWHEELS/2)*fOrientationChange/DISTANCETOSENSORS);
-	fRightSetPoint = fVelSetPoint*(1 + (DISTANCEBETWEENWHEELS/2)*fOrientationChange/DISTANCETOSENSORS);
+void vOdometryInverseKinematics(double dOrientationChange, float fVelSetPoint) {
+	fLeftSetPoint = fVelSetPoint*(1 - (DISTANCEBETWEENWHEELS/2)*dOrientationChange/DISTANCETOSENSORS);
+	fRightSetPoint = fVelSetPoint*(1 + (DISTANCEBETWEENWHEELS/2)*dOrientationChange/DISTANCETOSENSORS);
 }

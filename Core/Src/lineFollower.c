@@ -18,10 +18,13 @@ float fVsoft = 0.75;
 char cflag = 0;
 unsigned char ucFollowerState = 0;
 unsigned char ucFollowerCounter = 0;
-float fOrientationChange = 0;
+double dOrientationChange = 0;
 extern float fVelSetPoint;
 extern float fLeftSetPoint;
 extern float fRightSetPoint;
+extern positionStruct xPosition;
+double dActualOrientation = 0;
+// double dActualXPosition = 0;
 TIM_HandleTypeDef *pLineFollowerTIM;
 
 
@@ -129,28 +132,33 @@ void vLineFollowerStop() {
 }
 
 void vLineFollowerNewTracker(lineSensorsStateStruct xS) {
+
 	if(xS.leftSensor == white && xS.mostLeftSensor == white && xS.rightSensor == white && xS.mostRightSensor == white && xS.middleSensor == white ) {
-		fOrientationChange = 0;
+		dOrientationChange = 0;
 		fVelSetPoint = 0;
-		vOdometryInverseKinematics(fOrientationChange, fVelSetPoint);
+		vOdometryInverseKinematics(dOrientationChange, fVelSetPoint);
 	} else if(xS.mostLeftSensor == white) {
-		fOrientationChange = 2*(PI/180)*SENSORANGLE;
-		vOdometryInverseKinematics(fOrientationChange, fVelSetPoint);
+		dOrientationChange = 2*(PI/180)*SENSORANGLE;
+		vOdometryInverseKinematics(dOrientationChange, fVelSetPoint);
 	} else if(xS.mostRightSensor == white) {
-		fOrientationChange = -2*(PI/180)*SENSORANGLE;
-		vOdometryInverseKinematics(fOrientationChange, fVelSetPoint);
+		dOrientationChange = -2*(PI/180)*SENSORANGLE;
+		vOdometryInverseKinematics(dOrientationChange, fVelSetPoint);
 	} else if(xS.leftSensor == white) {
-		fOrientationChange = (PI/180)*SENSORANGLE;
-		vOdometryInverseKinematics(fOrientationChange, fVelSetPoint);
+		dOrientationChange = (PI/180)*SENSORANGLE;
+		vOdometryInverseKinematics(dOrientationChange, fVelSetPoint);
 	} else if(xS.rightSensor == white) {
-		fOrientationChange = -1*(PI/180)*SENSORANGLE;
-		vOdometryInverseKinematics(fOrientationChange, fVelSetPoint);
+		dOrientationChange = -1*(PI/180)*SENSORANGLE;
+		vOdometryInverseKinematics(dOrientationChange, fVelSetPoint);
 	} else if(xS.middleSensor == white) {
-		fOrientationChange = 0;
-		vOdometryInverseKinematics(fOrientationChange, fVelSetPoint);
+		dOrientationChange = 0;
+		vOdometryInverseKinematics(dOrientationChange, fVelSetPoint);
 	} else {
+		dOrientationChange = dActualOrientation - xPosition.dThetaPosition;
+		vOdometryInverseKinematics(dOrientationChange, fVelSetPoint);
 		//to-do
 		//Aqui seria uma questão de subtrair da orientação o quanto que se variou nela entre uma interrupção e outra
 	}
+	dActualOrientation = xPosition.dThetaPosition;
+	//dActualXPosition = xPosition.dXPostion;
 }
 
