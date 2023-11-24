@@ -17,6 +17,7 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include "communicationStateMachine.h"
 #include "main.h"
 #include "usart.h"
 #include "tim.h"
@@ -58,6 +59,9 @@ extern TIM_HandleTypeDef *pLineFollowerTIM;
 extern int iOdometryClockDivision;
 extern ultraSonicSensorStruct xUltraSonicSensor;
 extern TIM_HandleTypeDef *pUltraSonicTriggerCallback;
+extern unsigned char ucData;
+float fdummyData[3] = {0, 0, 0};
+
 
 /* USER CODE END PV */
 
@@ -107,7 +111,7 @@ int main(void)
   MX_TIM6_Init();
   MX_TIM3_Init();
   MX_TIM20_Init();
-  MX_USART1_UART_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
   vInitEncoders(&htim16,&htim17);
   vMotorsInit(&htim1);
@@ -115,7 +119,7 @@ int main(void)
   vOdometryInit(&htim6, iOdometryClockDivision);
   pid_init(0.25, 0.05, 0, 0, 1);
   vUltrasonicSensorInit(&htim3); // frontal
-  /* USER CODE END 2 */
+  HAL_UART_Receive_IT(&huart3, (uint8_t*)&ucData, 1);  /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -190,8 +194,8 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 	if(htim == pLineFollowerTIM) {
-		//vLineFollowerTracker(xLineSensorsGetState());
-		vPIDActuatorSetValue(pidUpdateData());
+		vLineFollowerTracker(xLineSensorsGetState());
+		//vPIDActuatorSetValue(pidUpdateData());
 	} else if(htim == xLeftEncoder.htim || htim == xRightEncoder.htim) {
 		vEncoderOverflowCallback(htim);
 	} else if(htim == pOdometryTIM) {
@@ -218,6 +222,14 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 		vMotorsStop();
 	} else if(xBt.rightBt) {
 		vMotorsStart();
+	}
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+	if(huart == &huart3) {
+		HAL_UART_Receive_IT(huart, (uint8_t*)&ucData, 1);
+		vCommunicationStateMachineProcessStateMachine(ucData);
+		//HAL_UART_Transmit_IT(huart, &ucData, 1);
 	}
 }
 
