@@ -11,7 +11,7 @@
 
 #define DISTANCEBETWEENWHEELS (13*0.01)
 #define WHEELRADIUS (32.5*0.001)
-#define DISTANCETOSENSORS 10 //Definir a distância do centro do carro até os sensores, aproximadamente.
+#define DISTANCETOSENSORS 7*0.01 //Definir a distância do centro do carro até os sensores, aproximadamente.
 extern positionStruct xPosition;
 extern float fLeftSetPoint;
 extern float fRightSetPoint;

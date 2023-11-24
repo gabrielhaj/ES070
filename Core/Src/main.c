@@ -61,8 +61,8 @@ extern TIM_HandleTypeDef *pUltraSonicTriggerCallback;
 unsigned char ucLcdAddress = 0x27;
 unsigned char ucLeftMotorState = 0;
 unsigned char ucRightMotorState = 0;
-float fVelSetPoint = 0.7;
-
+float fVelSetPoint = 0.9;
+char cUpdateScreen = 0;
 
 /* USER CODE END PV */
 
@@ -116,7 +116,8 @@ int main(void)
   vMotorsInit(&htim1);
   vLineFollowerInit(&htim7);
   vOdometryInit(&htim6, iOdometryClockDivision);
-  pid_init(0.25, 0, 0, 0, 1);
+  pid_init(3, 0, 0, 0, 1);
+  pid_init2(0.1, 0, 0, 0, 1);
  // vUltrasonicSensorInit(&htim3); // frontal
   vLcdInitLcd(&hi2c2,ucLcdAddress);
   /* USER CODE END 2 */
@@ -128,11 +129,12 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  vLcdUpdateScreen(0);
-	  HAL_Delay(10);
-	  if(xPosition.dMeanVelocity != 0) {
-		  vLineFollowerMoveFoward(1);
+	  if(cUpdateScreen){
+		  vLcdUpdateScreen(0);
+		  cUpdateScreen = 0;
 	  }
+
+
   }
   /* USER CODE END 3 */
 }
@@ -195,11 +197,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 	if(htim == pLineFollowerTIM) {
 		//vLineFollowerTracker(xLineSensorsGetState());
 		xS = xLineSensorsGetState();
+		vLineFollowerNewTracker(xS);
 		vPIDMotorsOutput();
 	} else if(htim == xLeftEncoder.htim || htim == xRightEncoder.htim) {
 		vEncoderOverflowCallback(htim);
 	} else if(htim == pOdometryTIM) {
 		vOdometryUpdateCurrentStatus();
+		cUpdateScreen = 1;
 	}
 }
 
@@ -215,7 +219,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 		vMotorsStop();
 	} else if(xBt.rightBt) {
 		vMotorsStart();
-		vLineFollowerMoveFoward(1);
 	}
 }
 

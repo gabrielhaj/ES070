@@ -50,7 +50,7 @@ void vEncoderCallback(TIM_HandleTypeDef* htim) {
     	        //This is not a big problem because the measurements are quite
     	        //close between each other. But for sure this is not the "correct"
     	        //way to solve this problem
-    	        if(xLeftEncoder.iTicks > 1 ) {
+    	        if(xLeftEncoder.iTicks > 30 ) {
     	        	xLeftEncoder.dFreq = (double)(CLKFREQUENCY/xLeftEncoder.iTicks);
     	        }
     	        xLeftEncoder.dVel = xLeftEncoder.dFreq*2*WHEELRADIUS*PI/HOLESPERREVOLUTION;
@@ -74,7 +74,7 @@ void vEncoderCallback(TIM_HandleTypeDef* htim) {
     	        //This is not a big problem because the measurements are quite
     	        //close between each other. But for sure this is not the "correct"
     	        //way to solve this problem
-    	        if(xRightEncoder.iTicks > 1 ) {
+    	        if(xRightEncoder.iTicks > 30 ) {
     	        	xRightEncoder.dFreq = (double)(CLKFREQUENCY/xRightEncoder.iTicks);
     	        }
     	        xRightEncoder.dVel = xRightEncoder.dFreq*2*WHEELRADIUS*PI/HOLESPERREVOLUTION;  //m/s
@@ -86,20 +86,20 @@ void vEncoderCallback(TIM_HandleTypeDef* htim) {
 void vEncoderOverflowCallback(TIM_HandleTypeDef* htim) {
 	if(htim == xLeftEncoder.htim) {
 		xLeftEncoder.uiTIM_OVC++;
-	} else if(htim == xLeftEncoder.htim) {
+	} else if(htim == xRightEncoder.htim) {
 		xRightEncoder.uiTIM_OVC++;
 	}
 }
 
 double dEncoderGetLeftWheelVelocity(){
-	if(ucLeftMotorState == 0) {
+	if(ucLeftMotorState == 0 || xLeftEncoder.uiTIM_OVC > 3) {
 		xLeftEncoder.dVel = 0;
 	}
 	return xLeftEncoder.dVel;
 }
 
 double dEncoderGetRightWheelVelocity(){
-	if(ucRightMotorState == 0) {
+	if(ucRightMotorState == 0 || xRightEncoder.uiTIM_OVC > 3) {
 		xRightEncoder.dVel = 0;
 	}
 	return xRightEncoder.dVel;

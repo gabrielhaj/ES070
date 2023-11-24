@@ -10,7 +10,7 @@
 #ifndef SOURCES_CONTROLLER_PID_H_
 #define SOURCES_CONTROLLER_PID_H_
 
-#define UPDATE_RATE_MS      100
+#define UPDATE_RATE_MS      1
 #define INTEGRATOR_MAX_SIZE 100
 
 typedef struct pid_data_type {
@@ -29,6 +29,7 @@ typedef struct pid_data_type {
 /* Output params:      n/a                          */
 /* ************************************************ */
 void pid_init(float fKp, float fKi, float fKd, unsigned short usIntegratorSize, float fOutputSaturation);
+void pid_init2(float fKp, float fKi, float fKd, unsigned short usIntegratorSize, float fOutputSaturation);
 
 
 /* ************************************************** */
@@ -119,6 +120,8 @@ unsigned short pid_getIntegratorWindow (void);
 /* Output params:      float: New Control effort     */
 /* ************************************************** */
 float pidUpdateData(float fSensorValue, float fReferenceValue);
+float pidUpdateData2(float fSensorValue, float fReferenceValue);
+void vPIDLineFollowerOutput(float fDirection);
 
 void vPIDPeriodicControlTask();
 float fPIDGetSetPointTemperature();
