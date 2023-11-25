@@ -77,7 +77,7 @@ void vEncoderCallback(TIM_HandleTypeDef* htim) {
     	        if(xRightEncoder.iTicks > 30 ) {
     	        	xRightEncoder.dFreq = (double)(CLKFREQUENCY/xRightEncoder.iTicks);
     	        }
-    	        xRightEncoder.dVel = xRightEncoder.dFreq*2*WHEELRADIUS*PI/HOLESPERREVOLUTION;  //m/s
+    	        xRightEncoder.dVel = xRightEncoder.dFreq*WHEELRADIUS*2*PI/HOLESPERREVOLUTION;  //m/s
     	        xRightEncoder.ucState = IDLE;
     	    }
     }

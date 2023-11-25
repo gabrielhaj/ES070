@@ -127,6 +127,13 @@ void vPIDPeriodicControlTask();
 float fPIDGetSetPointTemperature();
 void vPIDMotorsOutput();
 
+void vPIDIncreaseKp();
+void vPIDDecreaseKp();
+
+void vPIDIncreaseKd();
+
+void vPIDIncreaseKi();
+
 
 
 #endif /* SOURCES_CONTROLLER_PID_H_ */

@@ -30,8 +30,8 @@ void vOdometryUpdateCurrentStatus(){
 	double dICCRadius = 0;
 	float fAquisitionRate = (iOdometryClockDivision+1)/10000; //seconds
 	//por algum motivo o compilador não deixou isso ficar fora de uma função
-	double dRightVel = WHEELRADIUS*dEncoderGetRightWheelVelocity();
-	double dLeftVel = WHEELRADIUS*dEncoderGetLeftWheelVelocity();
+	double dRightVel = dEncoderGetRightWheelVelocity();
+	double dLeftVel = dEncoderGetLeftWheelVelocity();
 	if((dRightVel-dLeftVel) != 0) {
 		dICCRadius = (DISTANCEBETWEENWHEELS/2)*((dRightVel + dLeftVel)/(dRightVel-dLeftVel));
 	}

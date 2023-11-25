@@ -61,8 +61,10 @@ extern TIM_HandleTypeDef *pUltraSonicTriggerCallback;
 unsigned char ucLcdAddress = 0x27;
 unsigned char ucLeftMotorState = 0;
 unsigned char ucRightMotorState = 0;
-float fVelSetPoint = 0.9;
+float fVelSetPoint = 0.2;
 char cUpdateScreen = 0;
+float a = 0;
+float b = 0;
 
 /* USER CODE END PV */
 
@@ -116,7 +118,7 @@ int main(void)
   vMotorsInit(&htim1);
   vLineFollowerInit(&htim7);
   vOdometryInit(&htim6, iOdometryClockDivision);
-  pid_init(3, 0, 0, 0, 1);
+  pid_init(10, 0.25, 0.25, 0, 1);
   pid_init2(0.1, 0, 0, 0, 1);
  // vUltrasonicSensorInit(&htim3); // frontal
   vLcdInitLcd(&hi2c2,ucLcdAddress);
@@ -132,7 +134,13 @@ int main(void)
 	  if(cUpdateScreen){
 		  vLcdUpdateScreen(0);
 		  cUpdateScreen = 0;
+		  vMotorsRightWheelFoward();
+		  vMotorsRightPower(a);
+		  vMotorsLeftWheelFoward();
+		  vMotorsLeftPower(b);
 	  }
+
+
 
 
   }
@@ -212,9 +220,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	if(xBt.enterBt) {
 
 	} else if(xBt.downBt) {
-
+		vPIDDecreaseKp();
 	} else if(xBt.upBt) {
-
+		vPIDIncreaseKp();
 	} else if(xBt.leftBt) {
 		vMotorsStop();
 	} else if(xBt.rightBt) {

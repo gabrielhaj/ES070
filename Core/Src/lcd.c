@@ -28,6 +28,7 @@ extern float fHeaterPWMDutyCycle;
 extern float fCoolerPWMDutyCycle;
 extern float fSetPointTemperature;
 extern unsigned short int usCoolerSpeed;
+extern pid_data_type pidConfig2;
 Lcd xLcd = {0};
 char cBackLight = 1;
 screens xScreen = 0;
@@ -282,7 +283,7 @@ void vLcdUpdateScreen(screens screen){
 		  vLcdSendCommand(CMD_CLEAR);
 		  vLcdSetCursor(0,0);
 		  strcat(cLine1,"Dist.:");
-		  strcat(cAuxLine1,vFtoa(xPosition.dTravelledDistance,'0'));
+		  strcat(cAuxLine1,vFtoa(pidConfig2.fKp,'0'));
 		  strcat(cAuxLine1,"m");
 		  strcat(cLine1,cAuxLine1);
 		  vLcdWriteString(cLine1);

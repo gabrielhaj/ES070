@@ -263,7 +263,7 @@ float pidUpdateData2(float fSensorValue, float fSetValue)
 }
 
 void vPIDMotorsOutput() {
-	fLeftActualPower = pidUpdateData(xLeftEncoder.dVel, fLeftSetPoint);
+	fLeftActualPower = pidUpdateData(dEncoderGetLeftWheelVelocity(), fLeftSetPoint);
 	if(fLeftActualPower > 1) {
 		fLeftActualPower = 1;
 	} else if(fLeftActualPower < 0) {
@@ -271,7 +271,7 @@ void vPIDMotorsOutput() {
 	}
 	vMotorsLeftWheelFoward();
 	vMotorsLeftPower(fLeftActualPower);
-	fRightActualPower = pidUpdateData(xRightEncoder.dVel, fRightSetPoint);
+	fRightActualPower = pidUpdateData(dEncoderGetRightWheelVelocity(), fRightSetPoint);
 	if(fRightActualPower > 1) {
 		fRightActualPower = 1;
 	} else if(fRightActualPower < 0) {
@@ -288,4 +288,19 @@ void vPIDLineFollowerOutput(float fDirection) {
 	fRightSetPoint = fVelSetPoint*(1 + fUpdate);
 }
 
+void vPIDIncreaseKp() {
+	pidConfig2.fKp *= 10;
+}
+
+void vPIDDecreaseKp(){
+	pidConfig2.fKp /= 10;
+}
+
+void vPIDIncreaseKd() {
+	pidConfig2.fKd ++;
+}
+
+void vPIDIncreaseKi() {
+	pidConfig2.fKi ++;
+}
 __weak void vPIDPeriodicControlTask() {}
