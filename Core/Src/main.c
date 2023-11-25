@@ -19,7 +19,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "dma.h"
 #include "usart.h"
+#include "opamp.h"
 #include "tim.h"
 #include "gpio.h"
 
@@ -28,6 +30,7 @@
 #include "encoder.h"
 #include "ultraSonicSensor.h"
 #include "FrontalSW.h"
+#include "battery.h"
 
 
 /* USER CODE END Includes */
@@ -59,6 +62,8 @@ extern TIM_HandleTypeDef *pLineFollowerTIM;
 extern int iOdometryClockDivision;
 extern ultraSonicSensorStruct xUltraSonicSensor;
 extern TIM_HandleTypeDef *pUltraSonicTriggerCallback;
+extern ADC_HandleTypeDef hadc2;
+
 
 /* USER CODE END PV */
 
@@ -100,6 +105,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_LPUART1_UART_Init();
   MX_TIM17_Init();
   MX_TIM16_Init();
@@ -110,6 +116,7 @@ int main(void)
   MX_TIM20_Init();
   MX_USART1_UART_Init();
   MX_ADC2_Init();
+  MX_OPAMP2_Init();
   /* USER CODE BEGIN 2 */
   vInitEncoders(&htim16,&htim17);
   vMotorsInit(&htim1);
@@ -117,6 +124,7 @@ int main(void)
   vOdometryInit(&htim6, iOdometryClockDivision);
   pid_init(0.25, 0.05, 0, 0, 1);
   vUltrasonicSensorInit(&htim3); // frontal
+  vBatteryInit(&hadc2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
