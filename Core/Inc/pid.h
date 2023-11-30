@@ -18,7 +18,8 @@ typedef struct pid_data_type {
 	float fError_previous;       		// used in the derivative
 	float fError_sum;            		// integrator cumulative error
 	unsigned short usIntegratorSize; 	//integrator window size
-	float fOutputSaturation;            // output saturation
+	float fOutputUpperSaturation;            // output saturation
+	float fOutputLowerSaturation;
 } pid_data_type;
 
 
@@ -28,8 +29,8 @@ typedef struct pid_data_type {
 /* Input params:       n/a                          */
 /* Output params:      n/a                          */
 /* ************************************************ */
-void pid_init(float fKp, float fKi, float fKd, unsigned short usIntegratorSize, float fOutputSaturation);
-void pid_init2(float fKp, float fKi, float fKd, unsigned short usIntegratorSize, float fOutputSaturation);
+void pid_init(float fKp, float fKi, float fKd, unsigned short usIntegratorSize, float fOutputUpperSaturation, float fOutputLowerSaturation);
+void pid_init2(float fKp, float fKi, float fKd, unsigned short usIntegratorSize, float fOutputUpperSaturation, float fOutputLowerSaturation);
 
 
 /* ************************************************** */

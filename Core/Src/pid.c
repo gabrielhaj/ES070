@@ -36,7 +36,7 @@ extern encoderStruct xLeftEncoder;
 /* Input params:       n/a                          */
 /* Output params:      n/a                          */
 /* ************************************************ */
-void pid_init(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float fOutputSaturation)
+void pid_init(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float fOutputUpperSaturation, float fOutputLowerSaturation )
 {
 	pidConfig.fKp = fKp;
 	pidConfig.fKd = fKd;
@@ -50,10 +50,11 @@ void pid_init(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float
 
 	pidConfig.usIntegratorSize = usIntSizeMs/UPDATE_RATE_MS;
 
-	pidConfig.fOutputSaturation = fOutputSaturation;
+	pidConfig.fOutputUpperSaturation = fOutputUpperSaturation;
+	pidConfig.fOutputLowerSaturation = fOutputLowerSaturation;
 }
 
-void pid_init2(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float fOutputSaturation)
+void pid_init2(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float fOutputUpperSaturation, float fOutputLowerSaturation )
 {
 	pidConfig2.fKp = fKp;
 	pidConfig2.fKd = fKd;
@@ -67,7 +68,8 @@ void pid_init2(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, floa
 
 	pidConfig2.usIntegratorSize = usIntSizeMs/UPDATE_RATE_MS;
 
-	pidConfig2.fOutputSaturation = fOutputSaturation;
+	pidConfig.fOutputUpperSaturation = fOutputUpperSaturation;
+	pidConfig.fOutputLowerSaturation = fOutputLowerSaturation;
 }
 
 /* ************************************************** */
@@ -212,13 +214,13 @@ float pidUpdateData(float fSensorValue, float fSetValue)
 
 	//fOut = -fOut;
 
-	if(fOut > pidConfig.fOutputSaturation)
+	if(fOut > pidConfig.fOutputUpperSaturation)
 	{
-		fOut = pidConfig.fOutputSaturation;
+		fOut = pidConfig.fOutputUpperSaturation;
 	}
-	else if (fOut < -pidConfig.fOutputSaturation)
+	else if (fOut < -pidConfig.fOutputUpperSaturation)
 	{
-		fOut = -pidConfig.fOutputSaturation;
+		fOut = -pidConfig.fOutputUpperSaturation;
 	}
 
 	return fOut;
@@ -250,20 +252,20 @@ float pidUpdateData2(float fSensorValue, float fSetValue)
 
 	//fOut = -fOut;
 
-	if(fOut > pidConfig2.fOutputSaturation)
+	if(fOut > pidConfig2.fOutputUpperSaturation)
 	{
-		fOut = pidConfig2.fOutputSaturation;
+		fOut = pidConfig2.fOutputUpperSaturation;
 	}
-	else if (fOut < -pidConfig2.fOutputSaturation)
+	else if (fOut < -pidConfig2.fOutputUpperSaturation)
 	{
-		fOut = -pidConfig2.fOutputSaturation;
+		fOut = -pidConfig2.fOutputUpperSaturation;
 	}
 
 	return fOut;
 }
 
 void vPIDMotorsOutput() {
-	fLeftActualPower = pidUpdateData(dEncoderGetLeftWheelVelocity(), fLeftSetPoint);
+	fLeftActualPower = fLeftActualPower + pidUpdateData(dEncoderGetLeftWheelVelocity(), fLeftSetPoint);
 	if(fLeftActualPower > 1) {
 		fLeftActualPower = 1;
 	} else if(fLeftActualPower < 0) {
@@ -271,7 +273,7 @@ void vPIDMotorsOutput() {
 	}
 	vMotorsLeftWheelFoward();
 	vMotorsLeftPower(fLeftActualPower);
-	fRightActualPower = pidUpdateData(dEncoderGetRightWheelVelocity(), fRightSetPoint);
+	fRightActualPower = fRightActualPower + pidUpdateData(dEncoderGetRightWheelVelocity(), fRightSetPoint);
 	if(fRightActualPower > 1) {
 		fRightActualPower = 1;
 	} else if(fRightActualPower < 0) {

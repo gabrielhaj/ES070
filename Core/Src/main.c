@@ -63,8 +63,10 @@ unsigned char ucLeftMotorState = 0;
 unsigned char ucRightMotorState = 0;
 float fVelSetPoint = 0.2;
 char cUpdateScreen = 0;
-float a = 0;
-float b = 0;
+float a = 1;
+float b = 1;
+int catchaD = 0;
+int catchaE = 0;
 
 /* USER CODE END PV */
 
@@ -118,8 +120,8 @@ int main(void)
   vMotorsInit(&htim1);
   vLineFollowerInit(&htim7);
   vOdometryInit(&htim6, iOdometryClockDivision);
-  pid_init(10, 0.25, 0.25, 0, 1);
-  pid_init2(0.1, 0, 0, 0, 1);
+  pid_init(0.05, 0.001, 0.001, 0, 1, 0.5);
+  pid_init2(0.1, 0, 0, 0, 1, 0);
  // vUltrasonicSensorInit(&htim3); // frontal
   vLcdInitLcd(&hi2c2,ucLcdAddress);
   /* USER CODE END 2 */
@@ -134,10 +136,7 @@ int main(void)
 	  if(cUpdateScreen){
 		  vLcdUpdateScreen(0);
 		  cUpdateScreen = 0;
-		  vMotorsRightWheelFoward();
-		  vMotorsRightPower(a);
-		  vMotorsLeftWheelFoward();
-		  vMotorsLeftPower(b);
+
 	  }
 
 
@@ -205,7 +204,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 	if(htim == pLineFollowerTIM) {
 		//vLineFollowerTracker(xLineSensorsGetState());
 		xS = xLineSensorsGetState();
-		vLineFollowerNewTracker(xS);
+		//vLineFollowerNewTracker(xS);
 		vPIDMotorsOutput();
 	} else if(htim == xLeftEncoder.htim || htim == xRightEncoder.htim) {
 		vEncoderOverflowCallback(htim);
@@ -218,15 +217,23 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	xBt = xReadButtons();
 	if(xBt.enterBt) {
-
+		pidConfig2.fKp  = 1;
+		//b = 0;
 	} else if(xBt.downBt) {
 		vPIDDecreaseKp();
+		b = b - 0.1;
 	} else if(xBt.upBt) {
 		vPIDIncreaseKp();
+		a = a+ 0.1;
+		b = b + 0.1;
 	} else if(xBt.leftBt) {
 		vMotorsStop();
 	} else if(xBt.rightBt) {
 		vMotorsStart();
+//		vMotorsRightWheelFoward();
+//		vMotorsRightPower(a);
+//		vMotorsLeftWheelFoward();
+//		vMotorsLeftPower(b);
 	}
 }
 
