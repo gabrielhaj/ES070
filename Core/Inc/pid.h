@@ -135,6 +135,10 @@ void vPIDIncreaseKd();
 
 void vPIDIncreaseKi();
 
+void vPID2SetKp(float fKp);
+void vPID2SetKi(float fKi);
+void vPID2SetKd(float fKd);
+
 
 
 #endif /* SOURCES_CONTROLLER_PID_H_ */

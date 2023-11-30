@@ -309,4 +309,14 @@ void vPIDIncreaseKd() {
 void vPIDIncreaseKi() {
 	pidConfig2.fKi ++;
 }
+
+void vPID2SetKp(float fKp){
+	pidConfig2.fKp = fKp;
+}
+void vPID2SetKi(float fKi){
+	pidConfig2.fKi = fKi;
+}
+void vPID2SetKd(float fKd) {
+	pidConfig2.fKd = fKd;
+}
 __weak void vPIDPeriodicControlTask() {}
