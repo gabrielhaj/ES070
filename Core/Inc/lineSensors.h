@@ -13,6 +13,8 @@ typedef enum {
 	white
 } color;
 
+
+
 typedef struct {
 	color mostLeftSensor;
 	color leftSensor;

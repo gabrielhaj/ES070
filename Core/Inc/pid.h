@@ -1,13 +1,3 @@
-/*
- * pid.h
- *
- *  Created on: Sep 29, 2023
- *      Author: aluno
- */
-
-#ifndef INC_PID_H_
-#define INC_PID_H_
-
 /* ***************************************************************** */
 /* File name:        pid.h                                           */
 /* File description: Header file containing the functions/methods    */
@@ -17,8 +7,10 @@
 /* Revision date:    21mai2023                                       */
 /* ***************************************************************** */
 
+#ifndef SOURCES_CONTROLLER_PID_H_
+#define SOURCES_CONTROLLER_PID_H_
 
-#define UPDATE_RATE_MS      100
+#define UPDATE_RATE_MS      1
 #define INTEGRATOR_MAX_SIZE 100
 
 typedef struct pid_data_type {
@@ -26,7 +18,8 @@ typedef struct pid_data_type {
 	float fError_previous;       		// used in the derivative
 	float fError_sum;            		// integrator cumulative error
 	unsigned short usIntegratorSize; 	//integrator window size
-	float fOutputSaturation;            // output saturation
+	float fOutputUpperSaturation;            // output saturation
+	float fOutputLowerSaturation;
 } pid_data_type;
 
 
@@ -36,7 +29,8 @@ typedef struct pid_data_type {
 /* Input params:       n/a                          */
 /* Output params:      n/a                          */
 /* ************************************************ */
-void pid_init(float fKp, float fKi, float fKd, unsigned short usIntegratorSize, float fOutputSaturation);
+void pid_init(float fKp, float fKi, float fKd, unsigned short usIntegratorSize, float fOutputUpperSaturation, float fOutputLowerSaturation);
+void pid_init2(float fKp, float fKi, float fKd, unsigned short usIntegratorSize, float fOutputUpperSaturation, float fOutputLowerSaturation);
 
 
 /* ************************************************** */
@@ -126,14 +120,21 @@ unsigned short pid_getIntegratorWindow (void);
 /*                     control reference              */
 /* Output params:      float: New Control effort     */
 /* ************************************************** */
-float pidUpdateData();
+float pidUpdateData(float fSensorValue, float fReferenceValue);
+float pidUpdateData2(float fSensorValue, float fReferenceValue);
+void vPIDLineFollowerOutput(float fDirection);
 
 void vPIDPeriodicControlTask();
 float fPIDGetSetPointTemperature();
-void vPIDActuatorSetValue(float fActuatorValue);
-int iPIDGetLineSensor();
+void vPIDMotorsOutput();
+
+void vPIDIncreaseKp();
+void vPIDDecreaseKp();
+
+void vPIDIncreaseKd();
+
+void vPIDIncreaseKi();
 
 
 
-
-#endif /* INC_PID_H_ */
+#endif /* SOURCES_CONTROLLER_PID_H_ */

@@ -1,9 +1,3 @@
-/*
- * pid.c
- *
- *  Created on: Sep 29, 2023
- *      Author: aluno
- */
 /* ***************************************************************** */
 /* File name:        pid.c                                           */
 /* File description: This file has a couple of useful functions to   */
@@ -15,12 +9,10 @@
 
 #include "pid.h"
 #include "main.h"
-#include "lineSensors.h"
-#include "motors.h"
 
 
 // Struct used to store the PID configuration parameters
-pid_data_type pidConfig;
+pid_data_type pidConfig,pidConfig2 ;
 // Counter used to control the integration error window
 unsigned short usIntegratorCount = 0;
 // Buffer used to store the errors to generate the integral error
@@ -28,8 +20,15 @@ float fIntegratorBuffer[INTEGRATOR_MAX_SIZE]={0};
 
 float fError, fDifference, fOut;
 
+extern float fVelSetPoint;
+float fLeftSetPoint = 0;
+float fRightSetPoint = 0;
+float fLeftActualPower = 0;
+float fRightActualPower = 0;
+float fUpdate = 0;
 extern float fSetPointTemperature;
-
+extern encoderStruct xRightEncoder;
+extern encoderStruct xLeftEncoder;
 
 /* ************************************************ */
 /* Method name:        pid_init                     */
@@ -37,7 +36,7 @@ extern float fSetPointTemperature;
 /* Input params:       n/a                          */
 /* Output params:      n/a                          */
 /* ************************************************ */
-void pid_init(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float fOutputSaturation)
+void pid_init(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float fOutputUpperSaturation, float fOutputLowerSaturation )
 {
 	pidConfig.fKp = fKp;
 	pidConfig.fKd = fKd;
@@ -51,7 +50,26 @@ void pid_init(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float
 
 	pidConfig.usIntegratorSize = usIntSizeMs/UPDATE_RATE_MS;
 
-	pidConfig.fOutputSaturation = fOutputSaturation;
+	pidConfig.fOutputUpperSaturation = fOutputUpperSaturation;
+	pidConfig.fOutputLowerSaturation = fOutputLowerSaturation;
+}
+
+void pid_init2(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float fOutputUpperSaturation, float fOutputLowerSaturation )
+{
+	pidConfig2.fKp = fKp;
+	pidConfig2.fKd = fKd;
+	pidConfig2.fKi = fKi;
+	pidConfig2.fError_previous = 0;
+	pidConfig2.fError_sum = 0.0;
+
+	// Saturates Integrator size (up to 10 s)
+	if((usIntSizeMs/UPDATE_RATE_MS)> INTEGRATOR_MAX_SIZE)
+	  usIntSizeMs = INTEGRATOR_MAX_SIZE * UPDATE_RATE_MS;
+
+	pidConfig2.usIntegratorSize = usIntSizeMs/UPDATE_RATE_MS;
+
+	pidConfig2.fOutputUpperSaturation = fOutputUpperSaturation;
+	pidConfig2.fOutputLowerSaturation = fOutputLowerSaturation;
 }
 
 /* ************************************************** */
@@ -170,20 +188,12 @@ unsigned short pid_getIntegratorWindow (void)
 /*                     control reference              */
 /* Output params:      float: New Control effort     */
 /* ************************************************** */
-float pidUpdateData()
+float pidUpdateData(float fSensorValue, float fSetValue)
 {
-	//float fError, fDifference, fOut, fPosition;
+	//float fError, fDifference, fOut;
 
 	// Proportional error
-	/*
-	if(iPIDGetLineSensor() != 10) {
-		fError = iPIDGetLineSensor();
-	}
-	*/
-	if(iPIDGetLineSensor() != 10){
-		fError = iPIDGetLineSensor();
-	}
-
+	fError = fSetValue - fSensorValue;
 
 	//Ingtegral error
 	pidConfig.fError_sum = pidConfig.fError_sum - fIntegratorBuffer[usIntegratorCount] + fError;
@@ -204,45 +214,99 @@ float pidUpdateData()
 
 	//fOut = -fOut;
 
-	if(fOut > pidConfig.fOutputSaturation)
+	if(fOut > pidConfig.fOutputUpperSaturation)
 	{
-		fOut = pidConfig.fOutputSaturation;
+		fOut = pidConfig.fOutputUpperSaturation;
+
 	}
-	else if (fOut < -pidConfig.fOutputSaturation)
+	else if (fOut < -pidConfig.fOutputUpperSaturation)
 	{
-		fOut = -pidConfig.fOutputSaturation;
+		fOut = -pidConfig.fOutputUpperSaturation;
+
 	}
-	//fError -= fOut;
+
 	return fOut;
 }
 
-void vPIDActuatorSetValue(float fActuatorValue) {
-	vMotorsLeftWheelFoward();
-	vMotorsRightWheelFoward();
-	vMotorsRightPower(0.6 - fActuatorValue);
-	vMotorsLeftPower(0.6 + fActuatorValue);
-}
+float pidUpdateData2(float fSensorValue, float fSetValue)
+{
+	float fError, fDifference, fOut;
 
+	// Proportional error
+	fError = fSetValue - fSensorValue;
 
+	//Ingtegral error
+	pidConfig2.fError_sum = pidConfig2.fError_sum - fIntegratorBuffer[usIntegratorCount] + fError;
 
-int iPIDGetLineSensor() {
-	lineSensorsStateStruct xS = {0};
-	int iValue = 10;
-	xS = xLineSensorsGetState();
-	if(xS.mostLeftSensor) {
-		iValue = -2;
-	} else if(xS.leftSensor) {
-		iValue = -1;
-	} else if(xS.middleSensor) {
-		iValue = 0;
-	} else if(xS.rightSensor) {
-		iValue = 1;
-	} else if(xS.mostRightSensor) {
-		iValue = 2;
+	fIntegratorBuffer[usIntegratorCount] = fError;
+
+	if(++usIntegratorCount >= pidConfig2.usIntegratorSize)
+		usIntegratorCount = 0;
+
+	// Differential error
+	fDifference = (fError - pidConfig2.fError_previous);
+
+	fOut = pidConfig2.fKp * fError
+		 + pidConfig2.fKi * pidConfig2.fError_sum *UPDATE_RATE_MS
+		 + pidConfig2.fKd * fDifference /UPDATE_RATE_MS;
+
+	pidConfig2.fError_previous = fError;
+
+	//fOut = -fOut;
+
+	if(fOut > pidConfig2.fOutputUpperSaturation)
+	{
+		fOut = pidConfig2.fOutputUpperSaturation;
+		pidConfig2.fError_sum = 0;
 	}
-	return iValue;
+	else if (fOut < -pidConfig2.fOutputUpperSaturation)
+	{
+		fOut = -pidConfig2.fOutputUpperSaturation;
+		pidConfig2.fError_sum = 0;
+	}
+
+	return fOut;
 }
 
+void vPIDMotorsOutput() {
+	fLeftActualPower = fLeftActualPower + pidUpdateData(dEncoderGetLeftWheelVelocity(), fLeftSetPoint);
+	if(fLeftActualPower > 1) {
+		fLeftActualPower = 1;
+	} else if(fLeftActualPower < 0) {
+		fLeftActualPower = 0;
+	}
+	vMotorsLeftWheelFoward();
+	vMotorsLeftPower(fLeftActualPower);
+	fRightActualPower = fRightActualPower + pidUpdateData(dEncoderGetRightWheelVelocity(), fRightSetPoint);
+	if(fRightActualPower > 1) {
+		fRightActualPower = 1;
+	} else if(fRightActualPower < 0) {
+		fRightActualPower = 0;
+	}
+	vMotorsRightWheelFoward();
+	vMotorsRightPower(fRightActualPower);
+}
+
+void vPIDLineFollowerOutput(float fDirection) {
+
+	fUpdate = pidUpdateData2(fDirection,0);
+	fLeftSetPoint = fVelSetPoint*(1- fUpdate);
+	fRightSetPoint = fVelSetPoint*(1 + fUpdate);
+}
+
+void vPIDIncreaseKp() {
+	pidConfig2.fKp +=  0.05;
+}
+
+void vPIDDecreaseKp(){
+	pidConfig2.fKp -= 0.05;
+}
+
+void vPIDIncreaseKd() {
+	pidConfig2.fKd ++;
+}
+
+void vPIDIncreaseKi() {
+	pidConfig2.fKi ++;
+}
 __weak void vPIDPeriodicControlTask() {}
-
-

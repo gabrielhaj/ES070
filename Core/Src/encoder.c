@@ -17,6 +17,11 @@
 
 encoderStruct xLeftEncoder = {0};
 encoderStruct xRightEncoder = {0};
+extern unsigned char ucLeftMotorState;
+extern unsigned char ucRightMotorState;
+extern int catchaD;
+extern int catchaE;
+
 
 
 void vInitEncoders(TIM_HandleTypeDef *htim1, TIM_HandleTypeDef *htim2) {
@@ -48,10 +53,12 @@ void vEncoderCallback(TIM_HandleTypeDef* htim) {
     	        //This is not a big problem because the measurements are quite
     	        //close between each other. But for sure this is not the "correct"
     	        //way to solve this problem
-    	        if(xLeftEncoder.iTicks > 1 ) {
-    	        	xLeftEncoder.dFreq = (double)(CLKFREQUENCY/xLeftEncoder.iTicks);
+    	    	xLeftEncoder.dFreq = (double)(CLKFREQUENCY/xLeftEncoder.iTicks);
+
+    	        if(xLeftEncoder.dFreq*2*WHEELRADIUS*PI/HOLESPERREVOLUTION < 0.8 ) {
+    	        	xLeftEncoder.dVel = xLeftEncoder.dFreq*2*WHEELRADIUS*PI/HOLESPERREVOLUTION;
     	        }
-    	        xLeftEncoder.dVel = xLeftEncoder.dFreq*2*PI/HOLESPERREVOLUTION;
+
     	        xLeftEncoder.ucState = IDLE;
     	    }
     } else if (htim == xRightEncoder.htim) {
@@ -59,8 +66,10 @@ void vEncoderCallback(TIM_HandleTypeDef* htim) {
     	        xRightEncoder.uiT1 = htim->Instance->CCR1;
     	        xRightEncoder.uiTIM_OVC = 0;
     	        xRightEncoder.ucState = DONE;
+    	        catchaD ++;
     	    }
     	    else if(xRightEncoder.ucState == DONE) {
+    	    	catchaD++;
     	    	xRightEncoder.uiT2 = htim->Instance->CCR1;
     	    	xRightEncoder.iTicks = (xRightEncoder.uiT2 + (xRightEncoder.uiTIM_OVC * 65536)) - xRightEncoder.uiT1;
     	        //Why >1 if? Because for some reason, the elapsedcallback is not called
@@ -72,11 +81,14 @@ void vEncoderCallback(TIM_HandleTypeDef* htim) {
     	        //This is not a big problem because the measurements are quite
     	        //close between each other. But for sure this is not the "correct"
     	        //way to solve this problem
-    	        if(xRightEncoder.iTicks > 1 ) {
-    	        	xRightEncoder.dFreq = (double)(CLKFREQUENCY/xRightEncoder.iTicks);
+    	    	xRightEncoder.dFreq = (double)(CLKFREQUENCY/xRightEncoder.iTicks);
+
+    	        if(xRightEncoder.dFreq*2*WHEELRADIUS*PI/HOLESPERREVOLUTION < 0.8 ) {
+    	        	xRightEncoder.dVel = xRightEncoder.dFreq*2*WHEELRADIUS*PI/HOLESPERREVOLUTION;
     	        }
-    	        xRightEncoder.dVel = xRightEncoder.dFreq*2*PI/HOLESPERREVOLUTION;  //m/s
+
     	        xRightEncoder.ucState = IDLE;
+
     	    }
     }
 }
@@ -84,16 +96,22 @@ void vEncoderCallback(TIM_HandleTypeDef* htim) {
 void vEncoderOverflowCallback(TIM_HandleTypeDef* htim) {
 	if(htim == xLeftEncoder.htim) {
 		xLeftEncoder.uiTIM_OVC++;
-	} else if(htim == xLeftEncoder.htim) {
+	} else if(htim == xRightEncoder.htim) {
 		xRightEncoder.uiTIM_OVC++;
 	}
 }
 
 double dEncoderGetLeftWheelVelocity(){
+	if(ucLeftMotorState == 0 || xLeftEncoder.uiTIM_OVC > 3) {
+		xLeftEncoder.dVel = 0;
+	}
 	return xLeftEncoder.dVel;
 }
 
 double dEncoderGetRightWheelVelocity(){
+	if(ucRightMotorState == 0 || xRightEncoder.uiTIM_OVC > 3) {
+		xRightEncoder.dVel = 0;
+	}
 	return xRightEncoder.dVel;
 }
 

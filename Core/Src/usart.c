@@ -70,6 +70,7 @@ void MX_LPUART1_UART_Init(void)
   /* USER CODE END LPUART1_Init 2 */
 
 }
+
 /* USART3 init function */
 
 void MX_USART3_UART_Init(void)

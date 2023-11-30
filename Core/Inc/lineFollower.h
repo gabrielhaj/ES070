@@ -35,5 +35,6 @@ void vLineFollowerSearchRight();
 
 void vLineFollowerStop();
 
+void vLineFollowerNewTracker();
 
 #endif /* INC_LINEFOLLOWER_H_ */

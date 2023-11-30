@@ -20,6 +20,7 @@ typedef struct {
 } positionStruct;
 
 void vOdometryInit(TIM_HandleTypeDef* htim, int iClockDivision);
-void vOdometryUpdateCurrentStatus(positionStruct xPosition);
+void vOdometryUpdateCurrentStatus();
+void vOdometryInverseKinematics(double dOrientationChange, float fVelSetPoint);
 
 #endif /* INC_ODOMETRY_H_ */

@@ -11,7 +11,10 @@
 
 #define DISTANCEBETWEENWHEELS (13*0.01)
 #define WHEELRADIUS (32.5*0.001)
-positionStruct xPosition = {0};
+#define DISTANCETOSENSORS 7*0.01 //Definir a distância do centro do carro até os sensores, aproximadamente.
+extern positionStruct xPosition;
+extern float fLeftSetPoint;
+extern float fRightSetPoint;
 int iOdometryClockDivision = 9999; //TIM6 is already divided by 17000. That results in a 10000 Hz freq.
 //Thus, for a 1 Hz operation, we should divide by 10000;
 
@@ -23,12 +26,15 @@ void vOdometryInit(TIM_HandleTypeDef* htim, int iClockDivision) {
 	pOdometryTIM->Instance->ARR = (uint32_t)iClockDivision;
 }
 
-void vOdometryUpdateCurrentStatus(positionStruct xPosition){
+void vOdometryUpdateCurrentStatus(){
+	double dICCRadius = 0;
 	float fAquisitionRate = (iOdometryClockDivision+1)/10000; //seconds
 	//por algum motivo o compilador não deixou isso ficar fora de uma função
-	double dRightVel = WHEELRADIUS*dEncoderGetRightWheelVelocity();
-	double dLeftVel = WHEELRADIUS*dEncoderGetLeftWheelVelocity();
-	double dICCRadius = (DISTANCEBETWEENWHEELS/2)*((dRightVel + dLeftVel)/(dRightVel-dLeftVel));
+	double dRightVel = dEncoderGetRightWheelVelocity();
+	double dLeftVel = dEncoderGetLeftWheelVelocity();
+	if((dRightVel-dLeftVel) != 0) {
+		dICCRadius = (DISTANCEBETWEENWHEELS/2)*((dRightVel + dLeftVel)/(dRightVel-dLeftVel));
+	}
 	double dDTheta = fAquisitionRate*(dRightVel - dLeftVel)/DISTANCEBETWEENWHEELS;
 	double dTravlledCenter = dICCRadius*dDTheta;
 	xPosition.iTimeCounter ++;
@@ -43,3 +49,7 @@ void vOdometryUpdateCurrentStatus(positionStruct xPosition){
 
 }
 
+void vOdometryInverseKinematics(double dOrientationChange, float fVelSetPoint) {
+	fLeftSetPoint = fVelSetPoint*(1 - (DISTANCEBETWEENWHEELS/2)*dOrientationChange/DISTANCETOSENSORS);
+	fRightSetPoint = fVelSetPoint*(1 + (DISTANCEBETWEENWHEELS/2)*dOrientationChange/DISTANCETOSENSORS);
+}
