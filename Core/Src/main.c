@@ -64,6 +64,7 @@ extern ultraSonicSensorStruct xUltraSonicSensor;
 extern TIM_HandleTypeDef *pUltraSonicTriggerCallback;
 extern ADC_HandleTypeDef hadc2;
 
+float carga;
 
 /* USER CODE END PV */
 
@@ -134,6 +135,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  carga = fBatteryGetVoltage();
   }
   /* USER CODE END 3 */
 }

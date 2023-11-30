@@ -1,8 +1,9 @@
 #MicroXplorer Configuration settings - do not modify
 ADC2.Channel-1\#ChannelRegularConversion=ADC_CHANNEL_VOPAMP2
 ADC2.CommonPathInternal=null|null|null|null
+ADC2.ContinuousConvMode=DISABLE
 ADC2.DMAContinuousRequests=ENABLE
-ADC2.IPParameters=Rank-1\#ChannelRegularConversion,Channel-1\#ChannelRegularConversion,SamplingTime-1\#ChannelRegularConversion,OffsetNumber-1\#ChannelRegularConversion,NbrOfConversionFlag,DMAContinuousRequests,CommonPathInternal
+ADC2.IPParameters=Rank-1\#ChannelRegularConversion,Channel-1\#ChannelRegularConversion,SamplingTime-1\#ChannelRegularConversion,OffsetNumber-1\#ChannelRegularConversion,NbrOfConversionFlag,DMAContinuousRequests,ContinuousConvMode,CommonPathInternal
 ADC2.NbrOfConversionFlag=1
 ADC2.OffsetNumber-1\#ChannelRegularConversion=ADC_OFFSET_NONE
 ADC2.Rank-1\#ChannelRegularConversion=1

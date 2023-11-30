@@ -8,12 +8,13 @@
 #ifndef INC_BATTERY_H_
 #define INC_BATTERY_H_
 
-#define MAXVOLTAGE 9
-#define MINVOLTAGE 1
+#define BUFFERSIZE 10
 
 #include "adc.h"
 
 void vBatteryInit(ADC_HandleTypeDef *hadc2);
+
+float fBatteryGetMeanVoltage();
 
 float fBatteryGetVoltage(void);
 
