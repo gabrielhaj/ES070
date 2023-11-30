@@ -13,7 +13,7 @@
 #define MAX_FOLLOWER_COUNTER 5
 #define SENSORANGLE 180 //degrees
 
-float fVmax = 1;
+float fVmax = 0.8;
 float fVsoft = 0.75;
 char cflag = 0;
 unsigned char ucFollowerState = 0;

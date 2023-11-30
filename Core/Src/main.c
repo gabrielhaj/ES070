@@ -17,6 +17,7 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include "communicationStateMachine.h"
 #include "main.h"
 #include "i2c.h"
 #include "usart.h"
@@ -58,6 +59,8 @@ extern TIM_HandleTypeDef *pOdometryTIM;
 extern TIM_HandleTypeDef *pLineFollowerTIM;
 extern int iOdometryClockDivision;
 extern TIM_HandleTypeDef *pUltraSonicTriggerCallback;
+extern unsigned char ucData;
+float fdummyData[3] = {0, 0, 0};
 unsigned char ucLcdAddress = 0x27;
 unsigned char ucLeftMotorState = 0;
 unsigned char ucRightMotorState = 0;
@@ -115,15 +118,21 @@ int main(void)
   MX_TIM7_Init();
   MX_I2C2_Init();
   MX_TIM6_Init();
+  MX_TIM3_Init();
+  MX_TIM20_Init();
+  MX_USART3_UART_Init();
+  
   /* USER CODE BEGIN 2 */
   vInitEncoders(&htim16,&htim17);
   vMotorsInit(&htim1);
   vLineFollowerInit(&htim7);
   vOdometryInit(&htim6, iOdometryClockDivision);
+  HAL_UART_Receive_IT(&huart3, (uint8_t*)&ucData, 1);  /* USER CODE END 2 */
   pid_init(0.05, 0, 0.001, 0, 1, 0.5);
   pid_init2(0.25, 0, 0, 0, 1, 1);
- // vUltrasonicSensorInit(&htim3); // frontal
+  vUltrasonicSensorInit(&htim3);
   vLcdInitLcd(&hi2c2,ucLcdAddress);
+  
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -233,6 +242,14 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 //		vMotorsRightPower(a);
 //		vMotorsLeftWheelFoward();
 //		vMotorsLeftPower(b);
+	}
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+	if(huart == &huart3) {
+		HAL_UART_Receive_IT(huart, (uint8_t*)&ucData, 1);
+		vCommunicationStateMachineProcessStateMachine(ucData);
+		//HAL_UART_Transmit_IT(huart, &ucData, 1);
 	}
 }
 
