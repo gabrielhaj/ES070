@@ -55,13 +55,14 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-extern UART_HandleTypeDef huart3;
 extern I2C_HandleTypeDef hi2c2;
 extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim6;
 extern TIM_HandleTypeDef htim7;
 extern TIM_HandleTypeDef htim16;
 extern TIM_HandleTypeDef htim17;
+extern TIM_HandleTypeDef htim20;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -253,6 +254,20 @@ void TIM1_TRG_COM_TIM17_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles TIM3 global interrupt.
+  */
+void TIM3_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM3_IRQn 0 */
+
+  /* USER CODE END TIM3_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim3);
+  /* USER CODE BEGIN TIM3_IRQn 1 */
+
+  /* USER CODE END TIM3_IRQn 1 */
+}
+
+/**
   * @brief This function handles I2C2 event interrupt / I2C2 wake-up interrupt through EXTI line 24.
   */
 void I2C2_EV_IRQHandler(void)
@@ -278,20 +293,6 @@ void I2C2_ER_IRQHandler(void)
   /* USER CODE BEGIN I2C2_ER_IRQn 1 */
 
   /* USER CODE END I2C2_ER_IRQn 1 */
-}
-
-/**
-  * @brief This function handles USART3 global interrupt / USART3 wake-up interrupt through EXTI line 28.
-  */
-void USART3_IRQHandler(void)
-{
-  /* USER CODE BEGIN USART3_IRQn 0 */
-
-  /* USER CODE END USART3_IRQn 0 */
-  HAL_UART_IRQHandler(&huart3);
-  /* USER CODE BEGIN USART3_IRQn 1 */
-
-  /* USER CODE END USART3_IRQn 1 */
 }
 
 /**
@@ -334,6 +335,20 @@ void TIM7_DAC_IRQHandler(void)
   /* USER CODE BEGIN TIM7_DAC_IRQn 1 */
 
   /* USER CODE END TIM7_DAC_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM20 trigger and commutation interrupts.
+  */
+void TIM20_TRG_COM_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM20_TRG_COM_IRQn 0 */
+
+  /* USER CODE END TIM20_TRG_COM_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim20);
+  /* USER CODE BEGIN TIM20_TRG_COM_IRQn 1 */
+
+  /* USER CODE END TIM20_TRG_COM_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

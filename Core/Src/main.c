@@ -17,7 +17,6 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include "communicationStateMachine.h"
 #include "main.h"
 #include "i2c.h"
 #include "usart.h"
@@ -71,6 +70,7 @@ float b = 1;
 int catchaD = 0;
 int catchaE = 0;
 
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -118,21 +118,21 @@ int main(void)
   MX_TIM7_Init();
   MX_I2C2_Init();
   MX_TIM6_Init();
+  MX_USART3_UART_Init();
   MX_TIM3_Init();
   MX_TIM20_Init();
-  MX_USART3_UART_Init();
-  
+
   /* USER CODE BEGIN 2 */
   vInitEncoders(&htim16,&htim17);
   vMotorsInit(&htim1);
   vLineFollowerInit(&htim7);
   vOdometryInit(&htim6, iOdometryClockDivision);
-  HAL_UART_Receive_IT(&huart3, (uint8_t*)&ucData, 1);  /* USER CODE END 2 */
+  HAL_UART_Receive_IT(&huart3, (uint8_t*)&ucData, 1);
   pid_init(0.05, 0, 0.001, 0, 1, 0.5);
   pid_init2(0.25, 0, 0, 0, 1, 1);
   vUltrasonicSensorInit(&htim3);
   vLcdInitLcd(&hi2c2,ucLcdAddress);
-  
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
