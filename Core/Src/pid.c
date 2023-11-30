@@ -25,7 +25,7 @@ float fLeftSetPoint = 0;
 float fRightSetPoint = 0;
 float fLeftActualPower = 0;
 float fRightActualPower = 0;
-
+float fUpdate = 0;
 extern float fSetPointTemperature;
 extern encoderStruct xRightEncoder;
 extern encoderStruct xLeftEncoder;
@@ -68,8 +68,8 @@ void pid_init2(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, floa
 
 	pidConfig2.usIntegratorSize = usIntSizeMs/UPDATE_RATE_MS;
 
-	pidConfig.fOutputUpperSaturation = fOutputUpperSaturation;
-	pidConfig.fOutputLowerSaturation = fOutputLowerSaturation;
+	pidConfig2.fOutputUpperSaturation = fOutputUpperSaturation;
+	pidConfig2.fOutputLowerSaturation = fOutputLowerSaturation;
 }
 
 /* ************************************************** */
@@ -217,10 +217,12 @@ float pidUpdateData(float fSensorValue, float fSetValue)
 	if(fOut > pidConfig.fOutputUpperSaturation)
 	{
 		fOut = pidConfig.fOutputUpperSaturation;
+
 	}
 	else if (fOut < -pidConfig.fOutputUpperSaturation)
 	{
 		fOut = -pidConfig.fOutputUpperSaturation;
+
 	}
 
 	return fOut;
@@ -255,10 +257,12 @@ float pidUpdateData2(float fSensorValue, float fSetValue)
 	if(fOut > pidConfig2.fOutputUpperSaturation)
 	{
 		fOut = pidConfig2.fOutputUpperSaturation;
+		pidConfig2.fError_sum = 0;
 	}
 	else if (fOut < -pidConfig2.fOutputUpperSaturation)
 	{
 		fOut = -pidConfig2.fOutputUpperSaturation;
+		pidConfig2.fError_sum = 0;
 	}
 
 	return fOut;
@@ -284,18 +288,18 @@ void vPIDMotorsOutput() {
 }
 
 void vPIDLineFollowerOutput(float fDirection) {
-	float fUpdate = 0;
+
 	fUpdate = pidUpdateData2(fDirection,0);
 	fLeftSetPoint = fVelSetPoint*(1- fUpdate);
 	fRightSetPoint = fVelSetPoint*(1 + fUpdate);
 }
 
 void vPIDIncreaseKp() {
-	pidConfig2.fKp *= 10;
+	pidConfig2.fKp +=  0.05;
 }
 
 void vPIDDecreaseKp(){
-	pidConfig2.fKp /= 10;
+	pidConfig2.fKp -= 0.05;
 }
 
 void vPIDIncreaseKd() {

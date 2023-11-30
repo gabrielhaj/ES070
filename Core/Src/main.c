@@ -61,7 +61,7 @@ extern TIM_HandleTypeDef *pUltraSonicTriggerCallback;
 unsigned char ucLcdAddress = 0x27;
 unsigned char ucLeftMotorState = 0;
 unsigned char ucRightMotorState = 0;
-float fVelSetPoint = 0.2;
+float fVelSetPoint = 0.3;
 char cUpdateScreen = 0;
 float a = 1;
 float b = 1;
@@ -120,8 +120,8 @@ int main(void)
   vMotorsInit(&htim1);
   vLineFollowerInit(&htim7);
   vOdometryInit(&htim6, iOdometryClockDivision);
-  pid_init(0.05, 0.001, 0.001, 0, 1, 0.5);
-  pid_init2(0.1, 0, 0, 0, 1, 0);
+  pid_init(0.05, 0, 0.001, 0, 1, 0.5);
+  pid_init2(0.25, 0, 0, 0, 1, 1);
  // vUltrasonicSensorInit(&htim3); // frontal
   vLcdInitLcd(&hi2c2,ucLcdAddress);
   /* USER CODE END 2 */
@@ -204,7 +204,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 	if(htim == pLineFollowerTIM) {
 		//vLineFollowerTracker(xLineSensorsGetState());
 		xS = xLineSensorsGetState();
-		//vLineFollowerNewTracker(xS);
+		vLineFollowerNewTracker(xS);
 		vPIDMotorsOutput();
 	} else if(htim == xLeftEncoder.htim || htim == xRightEncoder.htim) {
 		vEncoderOverflowCallback(htim);
@@ -217,7 +217,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	xBt = xReadButtons();
 	if(xBt.enterBt) {
-		pidConfig2.fKp  = 1;
 		//b = 0;
 	} else if(xBt.downBt) {
 		vPIDDecreaseKp();
