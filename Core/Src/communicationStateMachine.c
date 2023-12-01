@@ -56,7 +56,7 @@ extern float fdummyData[3];
 extern float a;
 extern float fLeftSetPoint;
 extern float fRightSetPoint;
-
+extern float fVelSetPoint;
 
 /* ************************************************************************************* */
 /* Method name:        vCommunicationStateMachineProcessStateMachine                     */
@@ -236,6 +236,7 @@ void vSetParam(unsigned char ucParamSet, char* cValue){
 			vMotorsStart();
 			vMotorsRightWheelFoward();
 			vMotorsLeftWheelFoward();
+			fVelSetPoint = atof(cValue);
 			break;
 		case 'p':
 			pid_setKp(atof(cValue));
