@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-12-01T20:45:53.978Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36" etag="v-1F6u5npbB1PXk9Y6NJ" version="22.1.5" type="github">
+<mxfile host="app.diagrams.net" modified="2023-12-01T21:23:20.016Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36" etag="BYnuijLG9pZDVSVc9vNo" version="22.1.5" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="1434" dy="790" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -173,7 +173,7 @@
         <mxCell id="Gj9MD5lR89a0dxnQXVou-7" value="fBatteryGetVoltage()" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="583.75" y="1210" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="Gj9MD5lR89a0dxnQXVou-9" value="&lt;div style=&quot;background-color:#ffffff;padding:0px 0px 0px 2px;&quot;&gt;&lt;div style=&quot;font-family: Consolas; font-size: 10pt;&quot;&gt;&lt;p style=&quot;background-color:#e8f2fe;margin:0;&quot;&gt;fBatteryGetAutonomy()&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="Gj9MD5lR89a0dxnQXVou-9" value="&lt;div style=&quot;background-color:#ffffff;padding:0px 0px 0px 2px;&quot;&gt;&lt;div style=&quot;font-family: Consolas; font-size: 10pt;&quot;&gt;&lt;p style=&quot;background-color:#e8f2fe;margin:0;&quot;&gt;iBatteryGetAutonomy()&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="560.63" y="1340" width="166.25" height="60" as="geometry" />
         </mxCell>
       </root>
