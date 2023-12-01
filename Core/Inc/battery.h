@@ -7,14 +7,15 @@
 
 #ifndef INC_BATTERY_H_
 #define INC_BATTERY_H_
-
-#define BUFFERSIZE 10
-
 #include "adc.h"
 
-void vBatteryInit(ADC_HandleTypeDef *hadc2);
+//#define BUFFERSIZE 1
 
-float fBatteryGetMeanVoltage();
+
+
+void vBatteryInit(ADC_HandleTypeDef *hadc);
+
+float fBatteryGetMeanVoltage(void);
 
 float fBatteryGetVoltage(void);
 

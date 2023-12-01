@@ -63,7 +63,8 @@ extern int iOdometryClockDivision;
 extern ultraSonicSensorStruct xUltraSonicSensor;
 extern TIM_HandleTypeDef *pUltraSonicTriggerCallback;
 extern ADC_HandleTypeDef hadc2;
-
+extern DMA_HandleTypeDef hdma_adc2;
+uint16_t usTemperature;
 float carga;
 
 /* USER CODE END PV */
