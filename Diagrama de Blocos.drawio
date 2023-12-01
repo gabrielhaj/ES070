@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-12-01T18:40:32.073Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0" etag="UJF_o40D9X2VCBRAq2Ys" version="21.8.2" type="github">
+<mxfile host="app.diagrams.net" modified="2023-12-01T18:55:37.834Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0" etag="5RizH0RKqbw-d5HBuBG8" version="21.8.2" type="github">
   <diagram name="Page-1" id="41xPmVqH5pH6I8MaSAvD">
     <mxGraphModel dx="808" dy="483" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2339" pageHeight="3300" math="0" shadow="0">
       <root>
@@ -43,13 +43,13 @@
         <mxCell id="0_JQrz2MO3-dY9JqCrrv-9" value="I2C" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#b1ddf0;strokeColor=#10739e;" parent="sulgx-hb0Q7P1GuBsmkf-14" vertex="1">
           <mxGeometry x="380" y="230" width="70" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="0_JQrz2MO3-dY9JqCrrv-10" value="UART" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#b1ddf0;strokeColor=#10739e;" parent="sulgx-hb0Q7P1GuBsmkf-14" vertex="1">
+        <mxCell id="0_JQrz2MO3-dY9JqCrrv-10" value="USART" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#b1ddf0;strokeColor=#10739e;" parent="sulgx-hb0Q7P1GuBsmkf-14" vertex="1">
           <mxGeometry x="380" y="330" width="70" height="70" as="geometry" />
         </mxCell>
         <mxCell id="sulgx-hb0Q7P1GuBsmkf-26" value="&lt;font color=&quot;#3333ff&quot;&gt;1X&lt;br&gt;2 CANAIS&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="sulgx-hb0Q7P1GuBsmkf-14" vertex="1">
           <mxGeometry x="450" y="200" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="0_JQrz2MO3-dY9JqCrrv-17" value="UART" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#b1ddf0;strokeColor=#10739e;" parent="sulgx-hb0Q7P1GuBsmkf-14" vertex="1">
+        <mxCell id="0_JQrz2MO3-dY9JqCrrv-17" value="USART" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#b1ddf0;strokeColor=#10739e;" parent="sulgx-hb0Q7P1GuBsmkf-14" vertex="1">
           <mxGeometry x="30" y="301" width="70" height="70" as="geometry" />
         </mxCell>
         <mxCell id="0_JQrz2MO3-dY9JqCrrv-20" value="ADC" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#b1ddf0;strokeColor=#10739e;" parent="sulgx-hb0Q7P1GuBsmkf-14" vertex="1">
