@@ -229,6 +229,7 @@ void vSetParam(unsigned char ucParamSet, char* cValue){
 	switch(ucParamSet) {
 		case 'v':
 			vMotorsBreak();
+			a = -1;
 			break;
 		case 'l':
 			a = 0;

@@ -58,6 +58,7 @@ extern TIM_HandleTypeDef *pOdometryTIM;
 extern TIM_HandleTypeDef *pLineFollowerTIM;
 extern int iOdometryClockDivision;
 extern TIM_HandleTypeDef *pUltraSonicTriggerCallback;
+extern ultraSonicSensorStruct xUltraSonicSensor;
 extern unsigned char ucData;
 float fdummyData[3] = {0, 0, 0};
 unsigned char ucLcdAddress = 0x27;
@@ -127,7 +128,7 @@ int main(void)
   vLineFollowerInit(&htim7);
   vOdometryInit(&htim6, iOdometryClockDivision);
   HAL_UART_Receive_IT(&huart3, (uint8_t*)&ucData, 1);
-  pid_init(0.5, 0, 0.01, 0, 1, 0.5);
+  pid_init(0.05, 0, 0.001, 0, 1, 0.5);
   pid_init2(0.25, 0, 0, 0, 1, 1);
   vUltrasonicSensorInit(&htim3);
   vLcdInitLcd(&hi2c2,ucLcdAddress);
@@ -206,13 +207,20 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 	if(htim == xRightEncoder.htim || htim == xLeftEncoder.htim){
 		vEncoderCallback(htim);
 	}
+	else if(htim == xUltraSonicSensor.htim){
+		vUltraSonicSensorCallback(htim);
+		if (xUltraSonicSensor.dDistance < 2) {
+			vMotorsStop();
+		}
+	}
 }
+
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 	if(htim == pLineFollowerTIM) {
 		//vLineFollowerTracker(xLineSensorsGetState());
 		xS = xLineSensorsGetState();
-		if(a = 0) {
+		if(a == 0) {
 			vLineFollowerNewTracker(xS);
 		}
 		vPIDMotorsOutput();
@@ -221,6 +229,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 	} else if(htim == pOdometryTIM) {
 		vOdometryUpdateCurrentStatus();
 		cUpdateScreen = 1;
+	}else if(htim == xUltraSonicSensor.htim) {
+		vUltraSonicSensorOverclockCallback(htim);
 	}
 }
 
