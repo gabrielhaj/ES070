@@ -16,7 +16,7 @@ void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte);
 //void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 
 void vReturnParam(unsigned char ucParamReturn);
-
+void vSetParam(unsigned char ucParamSet, char* cValue);
 /*extern void SER_Init      (void);
 extern int  SER_GetChar   (void);
 extern int SER_PutChar 		(int c);*/

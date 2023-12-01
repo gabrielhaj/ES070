@@ -88,7 +88,7 @@ void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 					}
 					break;
 				case SET:
-					if('v' == ucByte ||'l' == ucByte || 'd' == ucByte || 'p' == ucByte || 'i' == ucByte) {
+					if('v' == ucByte ||'l' == ucByte || 'd' == ucByte || 'p' == ucByte || 'i' == ucByte || 'g' == ucByte|| 'b' == ucByte|| 'h ' == ucByte) {
 						ucParam = ucByte;
 						ucValueCount = 0;
 						ucMachineState = VALUE;
@@ -222,24 +222,30 @@ void vReturnParam(unsigned char ucParamReturn) {
 /* Output params:      n/a                                                               */
 /* ************************************************************************************* */
 void vSetParam(unsigned char ucParamSet, char* cValue){
-	float fValue = atof(cValue);
+
 	switch(ucParamSet) {
 		case 'v':
-			fdummyData[0] = atof(cValue);
+			vMotorsBreak();
 			break;
 		case 'l':
-			fdummyData[1] = 1;
 			vMotorsStart();
-			break;
-		case 'd':
-			fdummyData[1] = 0;
-			vMotorsStop();
+			vMotorsRightWheelFoward();
+			vMotorsLeftWheelFoward();
 			break;
 		case 'p':
-			pidConfig.fKp = fValue;
+			pid_setKp(atof(cValue));
 			break;
-		case 'i':
-			pidConfig.fKi = fValue;
+		case 'd':
+			pid_setKd(atof(cValue));
+			break;
+		case 'g':
+			vPID2SetKp(atof(cValue));
+			break;
+		case 'b':
+			vPID2SetKi(atof(cValue));
+			break;
+		case 'h':
+			vPID2SetKd(atof(cValue));
 			break;
 	}
 }
