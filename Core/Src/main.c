@@ -65,8 +65,8 @@ unsigned char ucLeftMotorState = 0;
 unsigned char ucRightMotorState = 0;
 float fVelSetPoint = 0.3;
 char cUpdateScreen = 0;
-float a = 1;
-float b = 1;
+float a = -1;
+float b = -1;
 int catchaD = 0;
 int catchaE = 0;
 
@@ -127,7 +127,7 @@ int main(void)
   vLineFollowerInit(&htim7);
   vOdometryInit(&htim6, iOdometryClockDivision);
   HAL_UART_Receive_IT(&huart3, (uint8_t*)&ucData, 1);
-  pid_init(0.05, 0, 0.001, 0, 1, 0.5);
+  pid_init(0.5, 0, 0.01, 0, 1, 0.5);
   pid_init2(0.25, 0, 0, 0, 1, 1);
   vUltrasonicSensorInit(&htim3);
   vLcdInitLcd(&hi2c2,ucLcdAddress);
@@ -212,7 +212,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 	if(htim == pLineFollowerTIM) {
 		//vLineFollowerTracker(xLineSensorsGetState());
 		xS = xLineSensorsGetState();
-		vLineFollowerNewTracker(xS);
+		if(a = 0) {
+			vLineFollowerNewTracker(xS);
+		}
 		vPIDMotorsOutput();
 	} else if(htim == xLeftEncoder.htim || htim == xRightEncoder.htim) {
 		vEncoderOverflowCallback(htim);

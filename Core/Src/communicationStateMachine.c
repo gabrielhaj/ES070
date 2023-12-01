@@ -53,6 +53,9 @@ char sAllMessage[(MAX_VALUE_LENGHT+5+2)*6] = {0};
 //PID config
 extern pid_data_type pidConfig;
 extern float fdummyData[3];
+extern float a;
+extern float fLeftSetPoint;
+extern float fRightSetPoint;
 
 
 /* ************************************************************************************* */
@@ -88,7 +91,7 @@ void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 					}
 					break;
 				case SET:
-					if('v' == ucByte ||'l' == ucByte || 'd' == ucByte || 'p' == ucByte || 'i' == ucByte || 'g' == ucByte|| 'b' == ucByte|| 'h ' == ucByte) {
+					if('v' == ucByte ||'l' == ucByte || 'd' == ucByte || 'p' == ucByte || 'i' == ucByte || 'g' == ucByte|| 'b' == ucByte|| 'h' == ucByte|| 'r' == ucByte) {
 						ucParam = ucByte;
 						ucValueCount = 0;
 						ucMachineState = VALUE;
@@ -228,6 +231,7 @@ void vSetParam(unsigned char ucParamSet, char* cValue){
 			vMotorsBreak();
 			break;
 		case 'l':
+			a = 0;
 			vMotorsStart();
 			vMotorsRightWheelFoward();
 			vMotorsLeftWheelFoward();
@@ -247,6 +251,14 @@ void vSetParam(unsigned char ucParamSet, char* cValue){
 		case 'h':
 			vPID2SetKd(atof(cValue));
 			break;
+		case 'r':
+			a = 1;
+			vMotorsStart();
+			vMotorsRightWheelFoward();
+			vMotorsLeftWheelFoward();
+			fLeftSetPoint = atof(cValue);
+			fRightSetPoint = atof(cValue);
+
 	}
 }
 
