@@ -15,7 +15,7 @@
 extern positionStruct xPosition;
 extern float fLeftSetPoint;
 extern float fRightSetPoint;
-int iOdometryClockDivision = 9999; //TIM6 is already divided by 17000. That results in a 10000 Hz freq.
+int iOdometryClockDivision = 100; //TIM6 is already divided by 17000. That results in a 10000 Hz freq.
 //Thus, for a 1 Hz operation, we should divide by 10000;
 
 TIM_HandleTypeDef *pOdometryTIM;
@@ -23,12 +23,12 @@ TIM_HandleTypeDef *pOdometryTIM;
 void vOdometryInit(TIM_HandleTypeDef* htim, int iClockDivision) {
 	pOdometryTIM = htim;
 	HAL_TIM_Base_Start_IT(pOdometryTIM);
-	pOdometryTIM->Instance->ARR = (uint32_t)iClockDivision;
+	//pOdometryTIM->Instance->ARR = (uint32_t)iClockDivision;
 }
 
 void vOdometryUpdateCurrentStatus(){
 	double dICCRadius = 0;
-	float fAquisitionRate = (iOdometryClockDivision+1)/10000; //seconds
+	float fAquisitionRate = 0.01; //seconds
 	//por algum motivo o compilador não deixou isso ficar fora de uma função
 	double dRightVel = dEncoderGetRightWheelVelocity();
 	double dLeftVel = dEncoderGetLeftWheelVelocity();
