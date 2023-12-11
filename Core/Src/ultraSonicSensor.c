@@ -30,7 +30,7 @@ void vUltrasonicSensorInit(TIM_HandleTypeDef *htim) {
 }
 
 /*
-// /* Envia um pulso
+
 void vUltrasonicSensorSendTriggerPulse(TIM_HandleTypeDef* htim) {
     if(cFlag1 == 1) {
     	HAL_GPIO_WritePin(GPIOB, Ultra_All_Trig_PWM_Pin, GPIO_PIN_RESET); // Volte o pino TRIGGER para nível baixo

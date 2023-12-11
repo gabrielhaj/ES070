@@ -268,24 +268,24 @@ float pidUpdateData2(float fSensorValue, float fSetValue)
 	return fOut;
 }
 
-void vPIDMotorsOutput() {
-	fLeftActualPower = fLeftActualPower + pidUpdateData(dEncoderGetLeftWheelVelocity(), fLeftSetPoint);
-	if(fLeftActualPower > 1) {
-		fLeftActualPower = 1;
-	} else if(fLeftActualPower < 0) {
-		fLeftActualPower = 0;
-	}
-	vMotorsLeftWheelFoward();
-	vMotorsLeftPower(fLeftActualPower);
-	fRightActualPower = fRightActualPower + pidUpdateData(dEncoderGetRightWheelVelocity(), fRightSetPoint);
-	if(fRightActualPower > 1) {
-		fRightActualPower = 1;
-	} else if(fRightActualPower < 0) {
-		fRightActualPower = 0;
-	}
-	vMotorsRightWheelFoward();
-	vMotorsRightPower(fRightActualPower);
-}
+//void vPIDMotorsOutput() {
+//	fLeftActualPower = fLeftActualPower + pidUpdateData(dEncoderGetLeftWheelVelocity(), fLeftSetPoint);
+//	if(fLeftActualPower > 1) {
+//		fLeftActualPower = 1;
+//	} else if(fLeftActualPower < 0) {
+//		fLeftActualPower = 0;
+//	}
+//	vMotorsLeftWheelFoward();
+//	vMotorsLeftPower(fLeftActualPower);
+//	fRightActualPower = fRightActualPower + pidUpdateData(dEncoderGetRightWheelVelocity(), fRightSetPoint);
+//	if(fRightActualPower > 1) {
+//		fRightActualPower = 1;
+//	} else if(fRightActualPower < 0) {
+//		fRightActualPower = 0;
+//	}
+//	vMotorsRightWheelFoward();
+//	vMotorsRightPower(fRightActualPower);
+//}
 
 
 void vPIDMotorsOutput() {

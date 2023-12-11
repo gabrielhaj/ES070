@@ -8,14 +8,18 @@
 #ifndef INC_BUTTONS_H_
 #define INC_BUTTONS_H_
 
+typedef enum {
+	off,
+	on
+} buttonState;
 
 
 typedef struct {
-	GPIO_PinState leftBt;
-	GPIO_PinState rightBt;
-	GPIO_PinState upBt;
-	GPIO_PinState downBt;
-	GPIO_PinState enterBt;
+	buttonState leftBt;
+	buttonState rightBt;
+	buttonState upBt;
+	buttonState downBt;
+	buttonState enterBt;
 } buttons;
 
 buttons xReadButtons();

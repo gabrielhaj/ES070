@@ -35,6 +35,7 @@ screens xScreen = 0;
 screens xActualScreen = 0;
 char cStr[6] = {0};
 extern positionStruct xPosition;
+char cNewScreen = 1;
 
 
 
@@ -280,19 +281,33 @@ void vLcdUpdateScreen(screens screen){
 	//Build strings and send them to lcd
 	switch(screen) {
 	  case screen1:
-		  vLcdSendCommand(CMD_CLEAR);
-		  vLcdSetCursor(0,0);
-		  strcat(cLine1,"Dist.:");
-		  strcat(cAuxLine1,vFtoa(xPosition.dTravelledDistance,'0'));
-		  strcat(cAuxLine1,"m");
-		  strcat(cLine1,cAuxLine1);
-		  vLcdWriteString(cLine1);
-		  vLcdSetCursor(1,0);
-		  strcat(cLine2,"V.Atual:");
-		  strcat(cAuxLine2,vFtoa(xPosition.dMeanVelocity,'0'));
-		  strcat(cAuxLine2,"v");
-		  strcat(cLine2,cAuxLine2);
-		  vLcdWriteString(cLine2);
+		  if(cNewScreen) {
+			  vLcdSendCommand(CMD_CLEAR);
+			  vLcdSetCursor(0,0);
+			  strcat(cLine1,"Dist.:");
+			  strcat(cAuxLine1,vFtoa(xPosition.dTravelledDistance,'0'));
+			  strcat(cAuxLine1,"m");
+			  strcat(cLine1,cAuxLine1);
+			  vLcdWriteString(cLine1);
+			  vLcdSetCursor(1,0);
+			  strcat(cLine2,"V.Atual:");
+			  strcat(cAuxLine2,vFtoa(xPosition.dMeanVelocity,'0'));
+			  strcat(cAuxLine2,"v");
+			  strcat(cLine2,cAuxLine2);
+			  vLcdWriteString(cLine2);
+			  cNewScreen = 0;
+		  } else {
+			  vLcdSetCursor(0,6);
+			  strcat(cAuxLine1,vFtoa(xPosition.dTravelledDistance,'0'));
+			  strcat(cAuxLine1,"m");
+			  strcat(cLine1,cAuxLine1);
+			  vLcdSetCursor(1,8);
+			  strcat(cAuxLine2,vFtoa(xPosition.dMeanVelocity,'0'));
+			  strcat(cAuxLine2,"v");
+			  strcat(cLine2,cAuxLine2);
+			  vLcdWriteString(cLine2);
+		  }
+
 		  break;
 //	  case screen2:
 //		  vLcdSendCommand(CMD_CLEAR);

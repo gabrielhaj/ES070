@@ -211,8 +211,8 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 	}
 	else if(htim == xUltraSonicSensor.htim){
 		vUltraSonicSensorCallback(htim);
-		if(xUltraSonicSensor.dDistance < 8) {
-		  vBuzzerPlay();
+		if(xUltraSonicSensor.dDistance < 3) {
+		  //vBuzzerPlay();
 		} else if (xUltraSonicSensor.dDistance < 2) {
 			vMotorsStop();
 			vBuzzerStop();
