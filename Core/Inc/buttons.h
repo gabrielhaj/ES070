@@ -8,6 +8,8 @@
 #ifndef INC_BUTTONS_H_
 #define INC_BUTTONS_H_
 
+
+
 typedef struct {
 	GPIO_PinState leftBt;
 	GPIO_PinState rightBt;

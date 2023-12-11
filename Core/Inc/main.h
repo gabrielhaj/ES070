@@ -44,6 +44,7 @@ extern "C" {
 #include <string.h>
 #include "communicationStateMachine.h"
 #include "ultraSonicSensor.h"
+#include "buzzer.h"
 
 /* USER CODE END Includes */
 

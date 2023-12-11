@@ -12,7 +12,7 @@
 
 
 // Struct used to store the PID configuration parameters
-pid_data_type pidConfig,pidConfig2 ;
+pid_data_type pidConfig, pidConfig2 ;
 // Counter used to control the integration error window
 unsigned short usIntegratorCount = 0;
 // Buffer used to store the errors to generate the integral error
@@ -285,6 +285,26 @@ void vPIDMotorsOutput() {
 	}
 	vMotorsRightWheelFoward();
 	vMotorsRightPower(fRightActualPower);
+}
+
+
+void vPIDMotorsOutput() {
+  fLeftActualPower =  pidUpdateData(dEncoderGetLeftWheelVelocity(), fLeftSetPoint);
+  if(fLeftActualPower > 1) {
+    fLeftActualPower = 1;
+  } else if(fLeftActualPower < 0) {
+    fLeftActualPower = 0;
+  }
+  vMotorsLeftWheelFoward();
+  vMotorsLeftPower(fLeftActualPower);
+  fRightActualPower = pidUpdateData(dEncoderGetRightWheelVelocity(), fRightSetPoint);
+  if(fRightActualPower > 1) {
+    fRightActualPower = 1;
+  } else if(fRightActualPower < 0) {
+    fRightActualPower = 0;
+  }
+  vMotorsRightWheelFoward();
+  vMotorsRightPower(fRightActualPower);
 }
 
 void vPIDLineFollowerOutput(float fDirection) {

@@ -122,6 +122,7 @@ int main(void)
   MX_USART3_UART_Init();
   MX_TIM3_Init();
   MX_TIM20_Init();
+  MX_TIM8_Init();
   /* USER CODE BEGIN 2 */
   vInitEncoders(&htim16,&htim17);
   vMotorsInit(&htim1);
@@ -132,6 +133,7 @@ int main(void)
   pid_init2(0.25, 0, 0, 0, 1, 1);
   vUltrasonicSensorInit(&htim3);
   vLcdInitLcd(&hi2c2,ucLcdAddress);
+  vBuzzerConfig(1000, 100, &htim8);
 
   /* USER CODE END 2 */
 
@@ -209,8 +211,11 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 	}
 	else if(htim == xUltraSonicSensor.htim){
 		vUltraSonicSensorCallback(htim);
-		if (xUltraSonicSensor.dDistance < 10) {
+		if(xUltraSonicSensor.dDistance < 8) {
+		  vBuzzerPlay();
+		} else if (xUltraSonicSensor.dDistance < 2) {
 			vMotorsStop();
+			vBuzzerStop();
 		}
 	}
 }
