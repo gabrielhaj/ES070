@@ -18,15 +18,18 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
+#include "dma.h"
 #include "i2c.h"
 #include "usart.h"
+#include "opamp.h"
 #include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "lcd.h"
-
+#include "battery.h"
 
 
 /* USER CODE END Includes */
@@ -70,6 +73,11 @@ float a = -1;
 float b = -1;
 int catchaD = 0;
 int catchaE = 0;
+uint16_t usBattery;
+extern ADC_HandleTypeDef hadc2;
+extern DMA_HandleTypeDef hdma_adc2;
+extern OPAMP_HandleTypeDef hopamp2;
+float fVoltage = 0;
 
 
 /* USER CODE END PV */
@@ -112,6 +120,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_LPUART1_UART_Init();
   MX_TIM17_Init();
   MX_TIM16_Init();
@@ -123,6 +132,8 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM20_Init();
   MX_TIM8_Init();
+  MX_ADC2_Init();
+  MX_OPAMP2_Init();
   /* USER CODE BEGIN 2 */
   vInitEncoders(&htim16,&htim17);
   vMotorsInit(&htim1);
@@ -134,6 +145,7 @@ int main(void)
   vUltrasonicSensorInit(&htim3);
   vLcdInitLcd(&hi2c2,ucLcdAddress);
   vBuzzerConfig(1000, 100, &htim8);
+  vBatteryInit(&hadc2);
 
   /* USER CODE END 2 */
 
