@@ -125,7 +125,7 @@ float pidUpdateData2(float fSensorValue, float fReferenceValue);
 void vPIDLineFollowerOutput(float fDirection);
 
 void vPIDPeriodicControlTask();
-float fPIDGetSetPointTemperature();
+
 void vPIDMotorsOutput();
 
 void vPIDIncreaseKp();
@@ -138,6 +138,9 @@ void vPIDIncreaseKi();
 void vPID2SetKp(float fKp);
 void vPID2SetKi(float fKi);
 void vPID2SetKd(float fKd);
+float fPID2GetKp();
+float fPID2GetKi();
+float fPID2GetKd();
 
 
 

@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "motors.h"
+#include "odometry.h"
+#include "lineFollower.h"
 
 //Possible states of the state machine
 #define IDDLE '0'
@@ -49,6 +51,8 @@ char sData2[4] = {"!\n\r\0"};
 
 //The whole answer string sent from successful GET (all parameters at once)
 char sAllMessage[(MAX_VALUE_LENGHT+5+2)*6] = {0};
+
+
 
 //PID config
 extern pid_data_type pidConfig;
@@ -128,15 +132,27 @@ void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 }
 
 
+
+
 /* ************************************************************************************* */
 /* Method name:        vReturnParam                                                      */
 /* Method description: Transmit via UART the parameters requested by GET. Those can be:  */
-/* 						't' for current temperature;                                     */
-/* 						'h' for current heater duty cycle;                               */
-/* 						'c' for current cooler duty cycle;                               */
-/* 						'p' for current controller kp;                                   */
-/* 						'i' for current controller ki;                                   */
-/* 						'd' for current controller kd;                                   */
+/* 						'D' for travelled distance;                                      */
+/* 						'v' for actual velocity;                                         */
+/* 						'm' for mean velocity;                                           */
+/* 						'x' for x coordinate;                                            */
+/* 						'y' for y coordinate;                                            */
+/* 						't' for theta coordinate;                                        */
+/* 						'b' for current battery;                                         */
+/* 						'p' for motor kp;                                                */
+/* 						'i' for motor ki;                                                */
+/* 						'd' for motor kd;                                                */
+/* 						'g' for linefollower kp;                                         */
+/* 						'e' for linefollower ki;                                         */
+/* 						'l' for linefollower kd;                                         */
+/* 						'z' for on/off motors;                                           */
+/* 						'a' for on/off linefollower;                                     */
+/* 						'f' for on/off buzzer;                                           */
 /* 						'a' for all previous parameters.                                 */
 /* Input params:       ucParamReturn: selector of which parameter is requested           */
 /* Output params:      n/a                                                               */
@@ -145,61 +161,213 @@ void vReturnParam(unsigned char ucParamReturn) {
 	int iSize = 1;
 	memset(sMessage,0,sizeof(sMessage));
 	switch(ucParamReturn) {
-		case 'd':
-			sData[2] = ucParamReturn;
-			strcat(sMessage,sData);
-			strcat(sMessage,"000");
-			strcat(sMessage,sData2);
+		case 'D':
+			//sData[2] = ucParamReturn;
+			//strcat(sMessage,sData);
+			strcat(sMessage,vFtoa(dOdometryGetTravelledDistance(), 'o'));
+			strcat(sMessage,'\0');
+			//strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'v':
-			sData[2] = ucParamReturn;
-			strcat(sMessage,sData);
-			strcat(sMessage,"001");
-			strcat(sMessage,sData2);
+			strcat(sMessage,vFtoa(dOdometryGetActualVelocity(), 'o'));
+			strcat(sMessage,'\0');
+//			sData[2] = ucParamReturn;
+//			strcat(sMessage,sData);
+//			strcat(sMessage,"001");
+//			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
-		case 'V':
-			sData[2] = ucParamReturn;
-			strcat(sMessage,sData);
-			strcat(sMessage,"002");
-			strcat(sMessage,sData2);
+		case 'm':
+			strcat(sMessage,vFtoa(dOdometryGetMeanVelocity(), 'o'));
+			strcat(sMessage,'\0');
+//			sData[2] = ucParamReturn;
+//			strcat(sMessage,sData);
+//			strcat(sMessage,"002");
+//			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
-		case 'c':
-			sData[2] = ucParamReturn;
-			strcat(sMessage,sData);
-			strcat(sMessage,"003");
-			strcat(sMessage,sData2);
+		case 'x':
+			strcat(sMessage,vFtoa(dOdometryGetXCoordinate(), 'o'));
+			strcat(sMessage,'\0');
+//			sData[2] = ucParamReturn;
+//			strcat(sMessage,sData);
+//			strcat(sMessage,"003");
+//			strcat(sMessage,sData2);
+			while(sMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
+			break;
+		case 'y':
+			strcat(sMessage,vFtoa(dOdometryGetYCoordinate(), 'o'));
+			strcat(sMessage,'\0');
+//			sData[2] = ucParamReturn;
+//			strcat(sMessage,sData);
+//			strcat(sMessage,"004");
+//			strcat(sMessage,sData2);
+			while(sMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
+			break;
+		case 't':
+			strcat(sMessage,vFtoa(dOdometryGetThetaCoordinate(), 'o'));
+			strcat(sMessage,'\0');
+//			sData[2] = ucParamReturn;
+//			strcat(sMessage,sData);
+//			strcat(sMessage,"005");
+//			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'b':
-			sData[2] = ucParamReturn;
-			strcat(sMessage,sData);
-			strcat(sMessage,"004");
-			strcat(sMessage,sData2);
+//			sData[2] = ucParamReturn;
+//			strcat(sMessage,sData);
+//			strcat(sMessage,"004");
+//			strcat(sMessage,sData2);
+			while(sMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
+			break;
+		case 'p':
+			strcat(sMessage,vFtoa(pid_getKp(), 'o'));
+			strcat(sMessage,'\0');
+//			sData[2] = ucParamReturn;
+//			strcat(sMessage,sData);
+//			strcat(sMessage,"004");
+//			strcat(sMessage,sData2);
+			while(sMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
+			break;
+		case 'i':
+			strcat(sMessage,vFtoa(pid_getKi(), 'o'));
+			strcat(sMessage,'\0');
+//			sData[2] = ucParamReturn;
+//			strcat(sMessage,sData);
+//			strcat(sMessage,"004");
+//			strcat(sMessage,sData2);
+			while(sMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
+			break;
+		case 'd':
+			strcat(sMessage,vFtoa(pid_getKd(), 'o'));
+			strcat(sMessage,'\0');
+//			sData[2] = ucParamReturn;
+//			strcat(sMessage,sData);
+//			strcat(sMessage,"004");
+//			strcat(sMessage,sData2);
+			while(sMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
+			break;
+		case 'g':
+			strcat(sMessage,vFtoa(fPID2GetKp(), 'o'));
+			strcat(sMessage,'\0');
+//			sData[2] = ucParamReturn;
+//			strcat(sMessage,sData);
+//			strcat(sMessage,"004");
+//			strcat(sMessage,sData2);
+			while(sMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
+			break;
+		case 'e':
+			strcat(sMessage,vFtoa(fPID2GetKi(), 'o'));
+			strcat(sMessage,'\0');
+//			sData[2] = ucParamReturn;
+//			strcat(sMessage,sData);
+//			strcat(sMessage,"004");
+//			strcat(sMessage,sData2);
+			while(sMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
+			break;
+		case 'l':
+			strcat(sMessage,vFtoa(fPID2GetKd(), 'o'));
+			strcat(sMessage,'\0');
+//			sData[2] = ucParamReturn;
+//			strcat(sMessage,sData);
+//			strcat(sMessage,"004");
+//			strcat(sMessage,sData2);
+			while(sMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
+			break;
+		case 'z':
+			strcat(sMessage,cMotorsState());
+			strcat(sMessage,'\0');
+//			sData[2] = ucParamReturn;
+//			strcat(sMessage,sData);
+//			strcat(sMessage,"004");
+//			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'a':
-			sData[2] = ucParamReturn;
-			strcat(sMessage,sData);
-			strcat(sMessage,"005");
-			strcat(sMessage,sData2);
+			strcat(sMessage,cLineFollowerGetState());
+			strcat(sMessage,'\0');
+//			sData[2] = ucParamReturn;
+//			strcat(sMessage,sData);
+//			strcat(sMessage,"004");
+//			strcat(sMessage,sData2);
+			while(sMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
+			break;
+		case 'f':
+//			sData[2] = ucParamReturn;
+//			strcat(sMessage,sData);
+//			strcat(sMessage,"004");
+//			strcat(sMessage,sData2);
+			while(sMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
+			break;
+		case 'o':
+			vReturnParam('D');
+			vReturnParam('v');
+			vReturnParam('m');
+			vReturnParam('x');
+			vReturnParam('y');
+			vReturnParam('t');
+			vReturnParam('b');
+			vReturnParam('p');
+			vReturnParam('i');
+			vReturnParam('d');
+			vReturnParam('g');
+			vReturnParam('l');
+			vReturnParam('z');
+			vReturnParam('a');
+			vReturnParam('f');
+//			sData[2] = ucParamReturn;
+//			strcat(sMessage,sData);
+//			strcat(sMessage,"004");
+//			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
@@ -215,31 +383,27 @@ void vReturnParam(unsigned char ucParamReturn) {
 /* Method name:        vSetParam                                                         */
 /* Method description: Set parameters of the system                                      */
 /* Input params:       ucParamSet: parameter to be set. They can be:                     */
-/* 								't' for temperature;                                     */
-/* 								'h' for heater duty cycle;                               */
-/* 								'c' for cooler duty cycle;                               */
-/* 								'p' for controller kp;                                   */
-/* 								'i' for controller ki;                                   */
-/* 								'd' for controller kd.                                   */
+/* 								'p' for motor kp;                                     */
+/* 								'i' for motor ki;                               */
+/* 								'd' for motor kd;                               */
+/* 								'g' for line follower kp;                                   */
+/* 								'e' for line follower ki;                                   */
+/* 								'l' for line follower kd.                                   */
+/* 								'z' for motors on/off.                                   */
+/* 								'a' for line follower on/off.                                   */
+/* 								'f' for buzina on/off.                                   */
+/* 								'h' for max speed.                                   */
 /* 					   cValue: pointer to the new value for the parameter                */
 /* Output params:      n/a                                                               */
 /* ************************************************************************************* */
 void vSetParam(unsigned char ucParamSet, char* cValue){
 
 	switch(ucParamSet) {
-		case 'v':
-			vMotorsBreak();
-			a = -1;
-			break;
-		case 'l':
-			a = 0;
-			vMotorsStart();
-			vMotorsRightWheelFoward();
-			vMotorsLeftWheelFoward();
-			fVelSetPoint = atof(cValue);
-			break;
 		case 'p':
 			pid_setKp(atof(cValue));
+			break;
+		case 'i':
+			pid_setKi(atof(cValue));
 			break;
 		case 'd':
 			pid_setKd(atof(cValue));
@@ -247,21 +411,27 @@ void vSetParam(unsigned char ucParamSet, char* cValue){
 		case 'g':
 			vPID2SetKp(atof(cValue));
 			break;
-		case 'b':
+		case 'e':
 			vPID2SetKi(atof(cValue));
 			break;
-		case 'h':
+		case 'l':
 			vPID2SetKd(atof(cValue));
 			break;
-		case 'r':
-			a = 1;
-			vMotorsStart();
-			vMotorsRightWheelFoward();
-			vMotorsLeftWheelFoward();
-			fLeftSetPoint = atof(cValue);
-			fRightSetPoint = atof(cValue);
+		case 'h':
+			fVelSetPoint = atof(cValue);
+			break;
+		case 'z':
+			vMotorsSetState(cValue);
+			break;
+		case 'a':
+			vLineFollowerSetState(cValue);
+			break;
+		case 'f':
+			vBuzzerPlay();
+			break;
 
 	}
 }
+
 
 

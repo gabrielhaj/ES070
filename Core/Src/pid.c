@@ -339,4 +339,13 @@ void vPID2SetKi(float fKi){
 void vPID2SetKd(float fKd) {
 	pidConfig2.fKd = fKd;
 }
+float fPID2GetKp(){
+	return pidConfig2.fKp;
+}
+float fPID2GetKi(){
+	return pidConfig2.fKi;
+}
+float fPID2GetKd() {
+	return pidConfig2.fKd;
+}
 __weak void vPIDPeriodicControlTask() {}

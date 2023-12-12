@@ -10,6 +10,7 @@
 #include "odometry.h"
 
 #define DISTANCEBETWEENWHEELS (13*0.01)
+#define PI 3.1415
 #define WHEELRADIUS (32.5*0.001)
 #define DISTANCETOSENSORS 7*0.01 //Definir a distância do centro do carro até os sensores, aproximadamente.
 extern positionStruct xPosition;
@@ -42,6 +43,11 @@ void vOdometryUpdateCurrentStatus(){
 	xPosition.dXPostion += dTravlledCenter*(double)cos(dDTheta/2);
 	xPosition.dYPostion += dTravlledCenter*(double)sin(dDTheta/2);
 	xPosition.dThetaPosition +=  dDTheta;
+	if(xPosition.dThetaPosition > 2*PI) {
+		xPosition.dThetaPosition -= 2*PI;
+	} else if(xPosition.dThetaPosition < 2*PI) {
+		xPosition.dThetaPosition += 2*PI;
+	}
 	xPosition.dActualVelocity = (dRightVel+dLeftVel)/2;
 	xPosition.dMeanVelocity = xPosition.dTravelledDistance/(xPosition.iTimeCounter*fAquisitionRate);
 	//Velocidade média é uma questão: Velocidade média considerando que trecho? O total de todos os tempos?
@@ -53,3 +59,25 @@ void vOdometryInverseKinematics(double dOrientationChange, float fVelSetPoint) {
 	fLeftSetPoint = fVelSetPoint*(1 - (DISTANCEBETWEENWHEELS/2)*dOrientationChange/DISTANCETOSENSORS);
 	fRightSetPoint = fVelSetPoint*(1 + (DISTANCEBETWEENWHEELS/2)*dOrientationChange/DISTANCETOSENSORS);
 }
+
+double dOdometryGetTravelledDistance(void){
+	return xPosition.dTravelledDistance;
+}
+
+double dOdometryGetActualVelocity(void) {
+	return xPosition.dActualVelocity;
+}
+double dOdometryGetMeanVelocity(void) {
+	return xPosition.dMeanVelocity;
+}
+double dOdometryGetXCoordinate(void) {
+	return xPosition.dXPostion;
+}
+double dOdometryGetYCoordinate(void) {
+	return xPosition.dYPostion;
+}
+double dOdometryGetThetaCoordinate(void) {
+	return xPosition.dThetaPosition;
+}
+
+

@@ -17,6 +17,7 @@ void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte);
 
 void vReturnParam(unsigned char ucParamReturn);
 void vSetParam(unsigned char ucParamSet, char* cValue);
+char* vFtoa(float fNum, unsigned char ucType);
 /*extern void SER_Init      (void);
 extern int  SER_GetChar   (void);
 extern int SER_PutChar 		(int c);*/

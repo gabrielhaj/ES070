@@ -78,6 +78,27 @@ void vMotorsBreak() {
 	HAL_GPIO_WritePin(RightMotorIn4_GPIO_Port, RightMotorIn4_Pin, RESET);
 }
 
+char cMotorsGetState() {
+	if(ucLeftMotorState && ucRightMotorState) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+void vMotorsSetState(char cNewState) {
+	if(cNewState) {
+		ucLeftMotorState = 1;
+		ucRightMotorState = 1;
+		vMotorsStart();
+	}
+	else if(!cNewState) {
+		ucLeftMotorState = 0;
+		ucRightMotorState = 0;
+		vMotorsStop();
+	}
+}
+
 
 
 

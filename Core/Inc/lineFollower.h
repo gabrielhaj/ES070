@@ -37,4 +37,8 @@ void vLineFollowerStop();
 
 void vLineFollowerNewTracker();
 
+char cLineFollowerGetState();
+
+void vLineFollowerSetState(char cNewState);
+
 #endif /* INC_LINEFOLLOWER_H_ */

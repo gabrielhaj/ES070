@@ -30,6 +30,8 @@ void vMotorsRightWheelBackwards();
 
 void vMotorsBreak();
 
+char cMotorsGetState();
 
+void vMotorsSetState(char cNewState);
 
 #endif /* INC_MOTORS_H_ */
