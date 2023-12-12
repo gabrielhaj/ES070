@@ -70,6 +70,9 @@ float a = -1;
 float b = -1;
 int catchaD = 0;
 int catchaE = 0;
+extern char cNextParam[16];
+int iINextParam = 0;
+extern char cFlagAll;
 
 
 /* USER CODE END PV */
@@ -269,6 +272,19 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 	}
 }
 
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
+	if(huart == &huart3 && cFlagAll) {
+		if(iINextParam < 14) {
+			iINextParam ++;
+			vReturnParam(cNextParam[iINextParam]);
+			if(iINextParam == 14) {
+				iINextParam = 0;
+				cFlagAll = 0;
+			}
+		}
+
+	}
+}
 
 /* USER CODE END 4 */
 

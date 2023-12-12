@@ -49,9 +49,16 @@ char sData[5] = {"-a  \0"};
 //The end of the answer string
 char sData2[4] = {"!\n\r\0"};
 
+char cNextParam[15] = {"Dvmxytbpidgelzo"};
+
 //The whole answer string sent from successful GET (all parameters at once)
 char sAllMessage[(MAX_VALUE_LENGHT+5+2)*6] = {0};
 
+
+
+char cFlagAll = 0;
+
+extern int iINextParam;
 
 
 //PID config
@@ -87,7 +94,8 @@ void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 					}
 					break;
 				case GET:
-					if('d' == ucByte || 'v' == ucByte || 'V' == ucByte || 'c' == ucByte || 'b' == ucByte || 'a' == ucByte) {
+					if('D' == ucByte || 'v' == ucByte || 'm' == ucByte || 'x' == ucByte || 'y' == ucByte || 't' == ucByte || 'b' == ucByte
+							|| 'p' == ucByte || 'i' == ucByte || 'd' == ucByte || 'g' == ucByte || 'e' == ucByte || 'l' == ucByte || 'z' == ucByte || 'a' == ucByte || 'f' == ucByte || 'o' == ucByte) {
 						ucParam = ucByte;
 						ucMachineState = PARAM;
 					} else {
@@ -95,7 +103,7 @@ void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 					}
 					break;
 				case SET:
-					if('v' == ucByte ||'l' == ucByte || 'd' == ucByte || 'p' == ucByte || 'i' == ucByte || 'g' == ucByte|| 'b' == ucByte|| 'h' == ucByte|| 'r' == ucByte) {
+					if('p' == ucByte || 'i' == ucByte || 'd' == ucByte || 'g' == ucByte || 'e' == ucByte || 'l' == ucByte || 'z' == ucByte || 'a' == ucByte || 'f' == ucByte || 'h' == ucByte) {
 						ucParam = ucByte;
 						ucValueCount = 0;
 						ucMachineState = VALUE;
@@ -233,6 +241,8 @@ void vReturnParam(unsigned char ucParamReturn) {
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'b':
+			//strcat(sMessage,'100');
+			//strcat(sMessage,'\0');
 //			sData[2] = ucParamReturn;
 //			strcat(sMessage,sData);
 //			strcat(sMessage,"004");
@@ -315,7 +325,7 @@ void vReturnParam(unsigned char ucParamReturn) {
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'z':
-			strcat(sMessage,cMotorsState());
+			strcat(sMessage,vFtoa(cMotorsGetState(),'h'));
 			strcat(sMessage,'\0');
 //			sData[2] = ucParamReturn;
 //			strcat(sMessage,sData);
@@ -326,8 +336,8 @@ void vReturnParam(unsigned char ucParamReturn) {
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
-		case 'a':
-			strcat(sMessage,cLineFollowerGetState());
+		case 'o':
+			strcat(sMessage,vFtoa(cLineFollowerGetState(),'h'));
 			strcat(sMessage,'\0');
 //			sData[2] = ucParamReturn;
 //			strcat(sMessage,sData);
@@ -348,33 +358,14 @@ void vReturnParam(unsigned char ucParamReturn) {
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
-		case 'o':
-			vReturnParam('D');
-			vReturnParam('v');
-			vReturnParam('m');
-			vReturnParam('x');
-			vReturnParam('y');
-			vReturnParam('t');
-			vReturnParam('b');
-			vReturnParam('p');
-			vReturnParam('i');
-			vReturnParam('d');
-			vReturnParam('g');
-			vReturnParam('l');
-			vReturnParam('z');
-			vReturnParam('a');
-			vReturnParam('f');
-//			sData[2] = ucParamReturn;
-//			strcat(sMessage,sData);
-//			strcat(sMessage,"004");
-//			strcat(sMessage,sData2);
-			while(sMessage[iSize] != '\0'){
-				iSize ++;
-			}
-			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
+		case 'a':
+			char cAux;
+			cFlagAll = 1;
+			cAux = cNextParam[iINextParam];
+			vReturnParam(cAux);
+
 			break;
 			}
-			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sAllMessage, (uint16_t)iSize);
 			//break;
 	}
 
@@ -421,10 +412,10 @@ void vSetParam(unsigned char ucParamSet, char* cValue){
 			fVelSetPoint = atof(cValue);
 			break;
 		case 'z':
-			vMotorsSetState(cValue);
+			vMotorsSetState(atof(cValue));
 			break;
 		case 'a':
-			vLineFollowerSetState(cValue);
+			vLineFollowerSetState(atof(cValue));
 			break;
 		case 'f':
 			vBuzzerPlay();
