@@ -33,19 +33,33 @@ void vMotorsStop() {
 }
 
 void vMotorsLeftPower(float fLeftPower){
-	if(fLeftPower > 1) {
+	if(fLeftPower > 0 && fLeftPower < 1) {
+		vMotorsLeftWheelFoward();
+	} else if(fLeftPower > 1) {
 		fLeftPower = 1;
-	} else if(fLeftPower < 0) {
-		fLeftPower = 0;
+		vMotorsLeftWheelFoward();
+	} else if(fLeftPower < 0 && fLeftPower > -1) {
+		fLeftPower *= -1;
+		vMotorsLeftWheelBackwards();
+	} else if(fLeftPower < -1) {
+		fLeftPower = 1;
+		vMotorsLeftWheelBackwards();
 	}
 	pPWMMotors->Instance->CCR1 = (uint32_t)(fLeftPower*pPWMMotors->Instance->ARR);
 }
 
 void vMotorsRightPower(float fRightPower){
-	if(fRightPower > 1) {
+	if(fRightPower > 0 && fRightPower < 1) {
+		vMotorsRightWheelFoward();
+	} else if(fRightPower > 1) {
 		fRightPower = 1;
-	} else if(fRightPower < 0) {
-		fRightPower = 0;
+		vMotorsRightWheelFoward();
+	} else if(fRightPower < 0 && fRightPower > -1) {
+		fRightPower *= -1;
+		vMotorsRightWheelBackwards();
+	} else if(fRightPower < -1) {
+		fRightPower = 1;
+		vMotorsRightWheelBackwards();
 	}
 	pPWMMotors->Instance->CCR2 = (uint32_t)(fRightPower*pPWMMotors->Instance->ARR);
 }

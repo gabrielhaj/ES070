@@ -10,7 +10,7 @@
 #ifndef SOURCES_CONTROLLER_PID_H_
 #define SOURCES_CONTROLLER_PID_H_
 
-#define UPDATE_RATE_MS      1
+#define UPDATE_RATE_MS      10
 #define INTEGRATOR_MAX_SIZE 100
 
 typedef struct pid_data_type {

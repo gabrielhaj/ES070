@@ -73,6 +73,7 @@ int catchaE = 0;
 extern char cNextParam[17];
 int iINextParam = 0;
 extern char cFlagAll;
+extern char cState;
 
 
 /* USER CODE END PV */
@@ -131,7 +132,7 @@ int main(void)
   vMotorsInit(&htim1);
   vLineFollowerInit(&htim7);
   vOdometryInit(&htim6, iOdometryClockDivision);
-  HAL_UART_Receive_IT(&huart3, (uint8_t*)&ucData, 1);
+  HAL_UART_Receive_IT(&hlpuart1, (uint8_t*)&ucData, 1);
   pid_init(0.05, 0, 0.001, 0, 1, 0.5);
   pid_init2(0.25, 0, 0, 0, 1, 1);
   vUltrasonicSensorInit(&htim3);
@@ -227,11 +228,11 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 	if(htim == pLineFollowerTIM) {
 		//vLineFollowerTracker(xLineSensorsGetState());
-		xS = xLineSensorsGetState();
-		if(a == 0) {
+		if(cState) {
+			xS = xLineSensorsGetState();
 			vLineFollowerNewTracker(xS);
+			vPIDMotorsOutput();
 		}
-		vPIDMotorsOutput();
 	} else if(htim == xLeftEncoder.htim || htim == xRightEncoder.htim) {
 		vEncoderOverflowCallback(htim);
 	} else if(htim == pOdometryTIM) {
@@ -265,7 +266,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-	if(huart == &huart3) {
+	if(huart == &hlpuart1) {
 		HAL_UART_Receive_IT(huart, (uint8_t*)&ucData, 1);
 		vCommunicationStateMachineProcessStateMachine(ucData);
 		//HAL_UART_Transmit_IT(huart, &ucData, 1);
@@ -273,7 +274,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 }
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
-	if(huart == &huart3 && cFlagAll) {
+	if(huart == &hlpuart1  && cFlagAll) {
 		if(iINextParam < 15) {
 			iINextParam ++;
 			vReturnParam(cNextParam[iINextParam]);
