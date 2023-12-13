@@ -44,12 +44,12 @@ static char cValue[MAX_VALUE_LENGHT+1];
 char sMessage[MAX_VALUE_LENGHT + 5 + 2] = {0};
 
 //The beggining of the answer string
-char sData[5] = {"-a  \0"};
+char sData[5] = {"-A  \0"};
 
 //The end of the answer string
-char sData2[4] = {"!\n\r\0"};
+char sData2[2] = {"!\0"};
 
-char cNextParam[15] = {"Dvmxytbpidgelzo"};
+char cNextParam[16] = {"Dvmxytbpidgelzoh"};
 
 //The whole answer string sent from successful GET (all parameters at once)
 char sAllMessage[(MAX_VALUE_LENGHT+5+2)*6] = {0};
@@ -95,7 +95,8 @@ void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 					break;
 				case GET:
 					if('D' == ucByte || 'v' == ucByte || 'm' == ucByte || 'x' == ucByte || 'y' == ucByte || 't' == ucByte || 'b' == ucByte
-							|| 'p' == ucByte || 'i' == ucByte || 'd' == ucByte || 'g' == ucByte || 'e' == ucByte || 'l' == ucByte || 'z' == ucByte || 'a' == ucByte || 'f' == ucByte || 'o' == ucByte) {
+							|| 'p' == ucByte || 'i' == ucByte || 'd' == ucByte || 'g' == ucByte || 'e' == ucByte || 'l' == ucByte
+							|| 'z' == ucByte || 'a' == ucByte || 'f' == ucByte || 'o' == ucByte || 'h' == ucByte) {
 						ucParam = ucByte;
 						ucMachineState = PARAM;
 					} else {
@@ -103,7 +104,7 @@ void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 					}
 					break;
 				case SET:
-					if('p' == ucByte || 'i' == ucByte || 'd' == ucByte || 'g' == ucByte || 'e' == ucByte || 'l' == ucByte || 'z' == ucByte || 'a' == ucByte || 'f' == ucByte || 'h' == ucByte) {
+					if('p' == ucByte || 'i' == ucByte || 'd' == ucByte || 'g' == ucByte || 'e' == ucByte || 'l' == ucByte || 'z' == ucByte || 'o' == ucByte || 'f' == ucByte || 'h' == ucByte) {
 						ucParam = ucByte;
 						ucValueCount = 0;
 						ucMachineState = VALUE;
@@ -170,189 +171,160 @@ void vReturnParam(unsigned char ucParamReturn) {
 	memset(sMessage,0,sizeof(sMessage));
 	switch(ucParamReturn) {
 		case 'D':
-			//sData[2] = ucParamReturn;
-			//strcat(sMessage,sData);
+			sData[2] = ucParamReturn;
+			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(dOdometryGetTravelledDistance(), 'o'));
-			strcat(sMessage,'\0');
-			//strcat(sMessage,sData2);
+			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'v':
-			strcat(sMessage,vFtoa(dOdometryGetActualVelocity(), 'o'));
-			strcat(sMessage,'\0');
-//			sData[2] = ucParamReturn;
-//			strcat(sMessage,sData);
-//			strcat(sMessage,"001");
-//			strcat(sMessage,sData2);
+			sData[2] = ucParamReturn;
+			strcat(sMessage,sData);
+			strcat(sMessage,vFtoa(dOdometryGetActualVelocity()/100, 'o'));
+			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'm':
-			strcat(sMessage,vFtoa(dOdometryGetMeanVelocity(), 'o'));
-			strcat(sMessage,'\0');
-//			sData[2] = ucParamReturn;
-//			strcat(sMessage,sData);
-//			strcat(sMessage,"002");
-//			strcat(sMessage,sData2);
+			sData[2] = ucParamReturn;
+			strcat(sMessage,sData);
+			strcat(sMessage,vFtoa(dOdometryGetMeanVelocity()/100, 'o'));
+			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'x':
+			sData[2] = ucParamReturn;
+			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(dOdometryGetXCoordinate(), 'o'));
-			strcat(sMessage,'\0');
-//			sData[2] = ucParamReturn;
-//			strcat(sMessage,sData);
-//			strcat(sMessage,"003");
-//			strcat(sMessage,sData2);
+			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'y':
+			sData[2] = ucParamReturn;
+			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(dOdometryGetYCoordinate(), 'o'));
-			strcat(sMessage,'\0');
-//			sData[2] = ucParamReturn;
-//			strcat(sMessage,sData);
-//			strcat(sMessage,"004");
-//			strcat(sMessage,sData2);
+			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 't':
+			sData[2] = ucParamReturn;
+			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(dOdometryGetThetaCoordinate(), 'o'));
-			strcat(sMessage,'\0');
-//			sData[2] = ucParamReturn;
-//			strcat(sMessage,sData);
-//			strcat(sMessage,"005");
-//			strcat(sMessage,sData2);
+			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'b':
-			//strcat(sMessage,'100');
-			//strcat(sMessage,'\0');
-//			sData[2] = ucParamReturn;
-//			strcat(sMessage,sData);
-//			strcat(sMessage,"004");
-//			strcat(sMessage,sData2);
+			sData[2] = ucParamReturn;
+			strcat(sMessage,sData);
+			strcat(sMessage,"00,00");
+			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'p':
+			sData[2] = ucParamReturn;
+			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(pid_getKp(), 'o'));
-			strcat(sMessage,'\0');
-//			sData[2] = ucParamReturn;
-//			strcat(sMessage,sData);
-//			strcat(sMessage,"004");
-//			strcat(sMessage,sData2);
+			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'i':
+			sData[2] = ucParamReturn;
+			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(pid_getKi(), 'o'));
-			strcat(sMessage,'\0');
-//			sData[2] = ucParamReturn;
-//			strcat(sMessage,sData);
-//			strcat(sMessage,"004");
-//			strcat(sMessage,sData2);
+			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'd':
+			sData[2] = ucParamReturn;
+			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(pid_getKd(), 'o'));
-			strcat(sMessage,'\0');
-//			sData[2] = ucParamReturn;
-//			strcat(sMessage,sData);
-//			strcat(sMessage,"004");
-//			strcat(sMessage,sData2);
+			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'g':
+			sData[2] = ucParamReturn;
+			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(fPID2GetKp(), 'o'));
-			strcat(sMessage,'\0');
-//			sData[2] = ucParamReturn;
-//			strcat(sMessage,sData);
-//			strcat(sMessage,"004");
-//			strcat(sMessage,sData2);
+			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'e':
+			sData[2] = ucParamReturn;
+			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(fPID2GetKi(), 'o'));
-			strcat(sMessage,'\0');
-//			sData[2] = ucParamReturn;
-//			strcat(sMessage,sData);
-//			strcat(sMessage,"004");
-//			strcat(sMessage,sData2);
+			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'l':
+			sData[2] = ucParamReturn;
+			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(fPID2GetKd(), 'o'));
-			strcat(sMessage,'\0');
-//			sData[2] = ucParamReturn;
-//			strcat(sMessage,sData);
-//			strcat(sMessage,"004");
-//			strcat(sMessage,sData2);
+			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'z':
+			sData[2] = ucParamReturn;
+			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(cMotorsGetState(),'h'));
-			strcat(sMessage,'\0');
-//			sData[2] = ucParamReturn;
-//			strcat(sMessage,sData);
-//			strcat(sMessage,"004");
-//			strcat(sMessage,sData2);
+			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'o':
+			sData[2] = ucParamReturn;
+			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(cLineFollowerGetState(),'h'));
-			strcat(sMessage,'\0');
-//			sData[2] = ucParamReturn;
-//			strcat(sMessage,sData);
-//			strcat(sMessage,"004");
-//			strcat(sMessage,sData2);
+			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
 			HAL_UART_Transmit_IT(&huart3, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
-		case 'f':
-//			sData[2] = ucParamReturn;
-//			strcat(sMessage,sData);
-//			strcat(sMessage,"004");
-//			strcat(sMessage,sData2);
+		case 'h':
+			sData[2] = ucParamReturn;
+			strcat(sMessage,sData);
+			strcat(sMessage,vFtoa(fPIDGetVelSetPoint()/100,'o'));
+			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
 			}
@@ -363,7 +335,6 @@ void vReturnParam(unsigned char ucParamReturn) {
 			cFlagAll = 1;
 			cAux = cNextParam[iINextParam];
 			vReturnParam(cAux);
-
 			break;
 			}
 			//break;

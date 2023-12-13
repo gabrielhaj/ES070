@@ -348,4 +348,8 @@ float fPID2GetKi(){
 float fPID2GetKd() {
 	return pidConfig2.fKd;
 }
+
+float fPIDGetVelSetPoint(){
+	return fVelSetPoint;
+}
 __weak void vPIDPeriodicControlTask() {}

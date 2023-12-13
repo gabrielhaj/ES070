@@ -141,6 +141,7 @@ void vPID2SetKd(float fKd);
 float fPID2GetKp();
 float fPID2GetKi();
 float fPID2GetKd();
+float fPIDGetVelSetPoint();
 
 
 
