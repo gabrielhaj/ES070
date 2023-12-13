@@ -132,7 +132,7 @@ int main(void)
   vMotorsInit(&htim1);
   vLineFollowerInit(&htim7);
   vOdometryInit(&htim6, iOdometryClockDivision);
-  HAL_UART_Receive_IT(&hlpuart1, (uint8_t*)&ucData, 1);
+  HAL_UART_Receive_IT(&huart3, (uint8_t*)&ucData, 1);
   pid_init(0.05, 0, 0.001, 0, 1, 0.5);
   pid_init2(0.25, 0, 0, 0, 1, 1);
   vUltrasonicSensorInit(&htim3);
@@ -266,7 +266,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-	if(huart == &hlpuart1) {
+	if(huart == &huart3) {
 		HAL_UART_Receive_IT(huart, (uint8_t*)&ucData, 1);
 		vCommunicationStateMachineProcessStateMachine(ucData);
 		//HAL_UART_Transmit_IT(huart, &ucData, 1);
@@ -274,7 +274,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 }
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
-	if(huart == &hlpuart1  && cFlagAll) {
+	if(huart == &huart3  && cFlagAll) {
 		if(iINextParam < 15) {
 			iINextParam ++;
 			vReturnParam(cNextParam[iINextParam]);
