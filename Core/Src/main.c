@@ -133,8 +133,8 @@ int main(void)
   vLineFollowerInit(&htim7);
   vOdometryInit(&htim6, iOdometryClockDivision);
   HAL_UART_Receive_IT(&huart3, (uint8_t*)&ucData, 1);
-  pid_init(0.05, 0, 0.001, 0, 1, 0.5);
-  pid_init2(0.25, 0, 0, 0, 1, 1);
+  pid_init(3, 0.1 , 0.1 , 0, 1, 0.5);
+  pid_init2(0.4, 0, 0, 0, 1, 1);
   vUltrasonicSensorInit(&htim3);
   vLcdInitLcd(&hi2c2,ucLcdAddress);
   vBuzzerConfig(1000, 100, &htim8);
@@ -215,9 +215,9 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 	}
 	else if(htim == xUltraSonicSensor.htim){
 		vUltraSonicSensorCallback(htim);
-		if(xUltraSonicSensor.dDistance < 3) {
+		if(xUltraSonicSensor.dDistance < 20) {
 		  //vBuzzerPlay();
-		} else if (xUltraSonicSensor.dDistance < 2) {
+		} else if (xUltraSonicSensor.dDistance < 15) {
 			vMotorsStop();
 			vBuzzerStop();
 		}

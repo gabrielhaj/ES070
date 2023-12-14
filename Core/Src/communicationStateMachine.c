@@ -22,6 +22,8 @@
 #define PARAM '4'
 #define VALUE '5'
 
+#define PI 3.1415
+
 //Maximum lenght of string of values ("100,00")
 #define MAX_VALUE_LENGHT 6
 
@@ -394,16 +396,16 @@ void vSetParam(unsigned char ucParamSet, char* cValue){
 			vBuzzerPlay();
 			break;
 		case 'F':
-			vManualFoward();
+			vManualBackward(*cValue);
 			break;
 		case 'B':
-			vManualBackward();
+			vManualBackward(*cValue);
 			break;
 		case 'L':
-			vManualLeft();
+			vManualLeft(*cValue);
 			break;
 		case 'R':
-			vManualRight();
+			vManualRight(*cValue);
 			break;
 
 	}

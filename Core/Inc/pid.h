@@ -120,7 +120,7 @@ unsigned short pid_getIntegratorWindow (void);
 /*                     control reference              */
 /* Output params:      float: New Control effort     */
 /* ************************************************** */
-float pidUpdateData(float fSensorValue, float fReferenceValue);
+float pidUpdateData(float fSensorValue, float fReferenceValue, int i);
 float pidUpdateData2(float fSensorValue, float fReferenceValue);
 void vPIDLineFollowerOutput(float fDirection);
 

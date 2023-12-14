@@ -8,23 +8,45 @@
 
 #include "manual.h"
 #include "pid.h"
+#include "motors.h"
 
-void vManualFoward() {
-	vPIDLineFollowerOutput(0);
-	vPIDMotorsOutput();
+void vManualFoward(char cFlag) {
+	if(cFlag == '0') {
+	  vMotorsLeftPower(0);
+	  vMotorsRightPower(0);
+	} else {
+	   vPIDLineFollowerOutput(0);
+	   vPIDMotorsOutput();
+	}
+
 }
 
-void vManualBackward() {
-	vPIDLineFollowerOutput(0);
-	vPIDMotorsOutput();
+void vManualBackward(char cFlag) {
+	if(cFlag == '0') {
+	  vMotorsLeftPower(0);
+	  vMotorsRightPower(0);
+	} else {
+	   vPIDLineFollowerOutput(0);
+	   vPIDMotorsOutput();
+	}
 }
 
-void vManualLeft() {
-	vPIDLineFollowerOutput(-1);
-	vPIDMotorsOutput();
+void vManualLeft(char cFlag) {
+	if(cFlag == '0') {
+	  vMotorsLeftPower(0);
+	  vMotorsRightPower(0);
+	} else {
+	   vPIDLineFollowerOutput(-1);
+	   vPIDMotorsOutput();
+	}
 }
 
-void vManualRight() {
-	vPIDLineFollowerOutput(1);
-	vPIDMotorsOutput();
+void vManualRight(char cFlag) {
+	if(cFlag == '0') {
+	  vMotorsLeftPower(0);
+	  vMotorsRightPower(0);
+	} else {
+	   vPIDLineFollowerOutput(1);
+	   vPIDMotorsOutput();
+	}
 }

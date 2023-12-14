@@ -10,9 +10,9 @@
 
 
 
-void vManualFoward();
-void vManualBackward();
-void vManualLeft();
-void vManualRight();
+void vManualFoward(char cFlag);
+void vManualBackward(char cFlag);
+void vManualLeft(char cFlag);
+void vManualRight(char cFlag);
 
 #endif /* INC_MANUAL_H_ */

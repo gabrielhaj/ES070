@@ -12,13 +12,12 @@
 
 
 // Struct used to store the PID configuration parameters
-pid_data_type pidConfig, pidConfig2 ;
+pid_data_type pidConfig[3] = {0};
 // Counter used to control the integration error window
-unsigned short usIntegratorCount = 0;
-// Buffer used to store the errors to generate the integral error
-float fIntegratorBuffer[INTEGRATOR_MAX_SIZE]={0};
+unsigned short usIntegratorCount[3] = {0,0,0};
 
-float fError, fDifference, fOut;
+// Buffer used to store the errors to generate the integral error
+float fIntegratorBuffer[3][INTEGRATOR_MAX_SIZE]={0};
 
 extern float fVelSetPoint;
 float fLeftSetPoint = 0;
@@ -38,39 +37,51 @@ extern encoderStruct xLeftEncoder;
 /* ************************************************ */
 void pid_init(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float fOutputUpperSaturation, float fOutputLowerSaturation )
 {
-	pidConfig.fKp = fKp;
-	pidConfig.fKd = fKd;
-	pidConfig.fKi = fKi;
-	pidConfig.fError_previous = 0;
-	pidConfig.fError_sum = 0.0;
+	pidConfig[0].fKp = fKp;
+	pidConfig[0].fKd = fKd;
+	pidConfig[0].fKi = fKi;
+	pidConfig[0].fError_previous = 0;
+	pidConfig[0].fError_sum = 0.0;
+	pidConfig[1].fKp = fKp;
+	pidConfig[1].fKd = fKd;
+	pidConfig[1].fKi = fKi;
+	pidConfig[1].fError_previous = 0;
+	pidConfig[1].fError_sum = 0.0;
 
 	// Saturates Integrator size (up to 10 s)
 	if((usIntSizeMs/UPDATE_RATE_MS)> INTEGRATOR_MAX_SIZE)
 	  usIntSizeMs = INTEGRATOR_MAX_SIZE * UPDATE_RATE_MS;
 
-	pidConfig.usIntegratorSize = usIntSizeMs/UPDATE_RATE_MS;
+	pidConfig[0].usIntegratorSize = usIntSizeMs/UPDATE_RATE_MS;
 
-	pidConfig.fOutputUpperSaturation = fOutputUpperSaturation;
-	pidConfig.fOutputLowerSaturation = fOutputLowerSaturation;
+	pidConfig[0].fOutputUpperSaturation = fOutputUpperSaturation;
+	pidConfig[0].fOutputLowerSaturation = fOutputLowerSaturation;
+
+	pidConfig[1].usIntegratorSize = usIntSizeMs/UPDATE_RATE_MS;
+
+	pidConfig[1].fOutputUpperSaturation = fOutputUpperSaturation;
+	pidConfig[1].fOutputLowerSaturation = fOutputLowerSaturation;
 }
 
 void pid_init2(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float fOutputUpperSaturation, float fOutputLowerSaturation )
 {
-	pidConfig2.fKp = fKp;
-	pidConfig2.fKd = fKd;
-	pidConfig2.fKi = fKi;
-	pidConfig2.fError_previous = 0;
-	pidConfig2.fError_sum = 0.0;
+	pidConfig[2].fKp = fKp;
+	pidConfig[2].fKd = fKd;
+	pidConfig[2].fKi = fKi;
+	pidConfig[2].fError_previous = 0;
+	pidConfig[2].fError_sum = 0.0;
 
 	// Saturates Integrator size (up to 10 s)
 	if((usIntSizeMs/UPDATE_RATE_MS)> INTEGRATOR_MAX_SIZE)
 	  usIntSizeMs = INTEGRATOR_MAX_SIZE * UPDATE_RATE_MS;
 
-	pidConfig2.usIntegratorSize = usIntSizeMs/UPDATE_RATE_MS;
+	pidConfig[2].usIntegratorSize = usIntSizeMs/UPDATE_RATE_MS;
 
-	pidConfig2.fOutputUpperSaturation = fOutputUpperSaturation;
-	pidConfig2.fOutputLowerSaturation = fOutputLowerSaturation;
+	pidConfig[2].fOutputUpperSaturation = fOutputUpperSaturation;
+	pidConfig[2].fOutputLowerSaturation = fOutputLowerSaturation;
 }
+
+
 
 /* ************************************************** */
 /* Method name:        pid_setKp                      */
@@ -81,7 +92,8 @@ void pid_init2(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, floa
 /* ************************************************** */
 void pid_setKp(float fKp)
 {
-	pidConfig.fKp = fKp;
+	pidConfig[0].fKp = fKp;
+	pidConfig[1].fKp = fKp;
 }
 
 
@@ -94,7 +106,7 @@ void pid_setKp(float fKp)
 /* ************************************************** */
 float pid_getKp(void)
 {
-	return pidConfig.fKp;
+	return pidConfig[0].fKp;
 }
 
 
@@ -107,7 +119,8 @@ float pid_getKp(void)
 /* ************************************************** */
 void pid_setKi(float fKi)
 {
-	pidConfig.fKi = fKi;
+	pidConfig[0].fKi = fKi;
+	pidConfig[1].fKi = fKi;
 }
 
 
@@ -120,7 +133,7 @@ void pid_setKi(float fKi)
 /* ************************************************** */
 float pid_getKi(void)
 {
-	return pidConfig.fKi;
+	return pidConfig[0].fKi;
 }
 
 
@@ -133,7 +146,8 @@ float pid_getKi(void)
 /* ************************************************** */
 void pid_setKd(float fKd)
 {
-	pidConfig.fKd = fKd;
+	pidConfig[0].fKd = fKd;
+	pidConfig[1].fKd = fKd;
 }
 
 
@@ -146,7 +160,7 @@ void pid_setKd(float fKd)
 /* ************************************************** */
 float pid_getKd(void)
 {
-	return pidConfig.fKd;
+	return pidConfig[0].fKd;
 }
 
 /* ************************************************** */
@@ -162,7 +176,7 @@ void pid_setIntegratorWindow (unsigned short usIntSizeMs)
 	if((usIntSizeMs/UPDATE_RATE_MS)> INTEGRATOR_MAX_SIZE)
 	  usIntSizeMs = INTEGRATOR_MAX_SIZE * UPDATE_RATE_MS;
 
-	pidConfig.usIntegratorSize = usIntSizeMs/UPDATE_RATE_MS;
+	pidConfig[0].usIntegratorSize = usIntSizeMs/UPDATE_RATE_MS;
 }
 
 /* ************************************************** */
@@ -174,7 +188,7 @@ void pid_setIntegratorWindow (unsigned short usIntSizeMs)
 /* ************************************************** */
 unsigned short pid_getIntegratorWindow (void)
 {
-	return (pidConfig.usIntegratorSize*UPDATE_RATE_MS);
+	return (pidConfig[0].usIntegratorSize*UPDATE_RATE_MS);
 }
 
 /* ************************************************** */
@@ -188,40 +202,43 @@ unsigned short pid_getIntegratorWindow (void)
 /*                     control reference              */
 /* Output params:      float: New Control effort     */
 /* ************************************************** */
-float pidUpdateData(float fSensorValue, float fSetValue)
+float pidUpdateData(float fSensorValue, float fSetValue, int i)
 {
-	//float fError, fDifference, fOut;
+	float fError, fDifference, fOut;
 
 	// Proportional error
 	fError = fSetValue - fSensorValue;
 
+
 	//Ingtegral error
-	pidConfig.fError_sum = pidConfig.fError_sum - fIntegratorBuffer[usIntegratorCount] + fError;
+	pidConfig[i].fError_sum = pidConfig[i].fError_sum - fIntegratorBuffer[i][usIntegratorCount[i]] + fError;
 
-	fIntegratorBuffer[usIntegratorCount] = fError;
+	fIntegratorBuffer[i][usIntegratorCount[i]] = fError;
 
-	if(++usIntegratorCount >= pidConfig.usIntegratorSize)
-		usIntegratorCount = 0;
+	if(++usIntegratorCount[i] >= pidConfig[i].usIntegratorSize)
+		usIntegratorCount[i] = 0;
 
 	// Differential error
-	fDifference = (fError - pidConfig.fError_previous);
+	fDifference = (fError - pidConfig[i].fError_previous);
 
-	fOut = pidConfig.fKp * fError
-		 + pidConfig.fKi * pidConfig.fError_sum *UPDATE_RATE_MS
-		 + pidConfig.fKd * fDifference /UPDATE_RATE_MS;
+	fOut = pidConfig[i].fKp * fError
+		 + pidConfig[i].fKi * pidConfig[i].fError_sum *UPDATE_RATE_MS
+		 + pidConfig[i].fKd * fDifference /UPDATE_RATE_MS;
 
-	pidConfig.fError_previous = fError;
+	pidConfig[i].fError_previous = fError;
 
 	//fOut = -fOut;
 
-	if(fOut > pidConfig.fOutputUpperSaturation)
+	if(fOut > pidConfig[i].fOutputUpperSaturation)
 	{
-		fOut = pidConfig.fOutputUpperSaturation;
+		fOut = pidConfig[i].fOutputUpperSaturation;
+		pidConfig[i].fError_sum = pidConfig[i].fOutputUpperSaturation;
 
 	}
-	else if (fOut < -pidConfig.fOutputUpperSaturation)
+	else if (fOut < -pidConfig[i].fOutputUpperSaturation)
 	{
-		fOut = -pidConfig.fOutputUpperSaturation;
+		fOut = -pidConfig[i].fOutputUpperSaturation;
+		pidConfig[i].fError_sum = -pidConfig[i].fOutputUpperSaturation;
 
 	}
 
@@ -236,33 +253,33 @@ float pidUpdateData2(float fSensorValue, float fSetValue)
 	fError = fSetValue - fSensorValue;
 
 	//Ingtegral error
-	pidConfig2.fError_sum = pidConfig2.fError_sum - fIntegratorBuffer[usIntegratorCount] + fError;
+	pidConfig[2].fError_sum = pidConfig[2].fError_sum - fIntegratorBuffer[2][usIntegratorCount[2]] + fError;
 
-	fIntegratorBuffer[usIntegratorCount] = fError;
+	fIntegratorBuffer[2][usIntegratorCount[2]] = fError;
 
-	if(++usIntegratorCount >= pidConfig2.usIntegratorSize)
-		usIntegratorCount = 0;
+	if(++usIntegratorCount[2] >= pidConfig[2].usIntegratorSize)
+		usIntegratorCount[2] = 0;
 
 	// Differential error
-	fDifference = (fError - pidConfig2.fError_previous);
+	fDifference = (fError - pidConfig[2].fError_previous);
 
-	fOut = pidConfig2.fKp * fError
-		 + pidConfig2.fKi * pidConfig2.fError_sum *UPDATE_RATE_MS
-		 + pidConfig2.fKd * fDifference /UPDATE_RATE_MS;
+	fOut = pidConfig[2].fKp * fError
+		 + pidConfig[2].fKi * pidConfig[2].fError_sum *UPDATE_RATE_MS
+		 + pidConfig[2].fKd * fDifference /UPDATE_RATE_MS;
 
-	pidConfig2.fError_previous = fError;
+	pidConfig[2].fError_previous = fError;
 
 	//fOut = -fOut;
 
-	if(fOut > pidConfig2.fOutputUpperSaturation)
+	if(fOut > pidConfig[2].fOutputUpperSaturation)
 	{
-		fOut = pidConfig2.fOutputUpperSaturation;
-		pidConfig2.fError_sum = 0;
+		fOut = pidConfig[2].fOutputUpperSaturation;
+		pidConfig[2].fError_sum = 0;
 	}
-	else if (fOut < -pidConfig2.fOutputUpperSaturation)
+	else if (fOut < -pidConfig[2].fOutputUpperSaturation)
 	{
-		fOut = -pidConfig2.fOutputUpperSaturation;
-		pidConfig2.fError_sum = 0;
+		fOut = -pidConfig[2].fOutputUpperSaturation;
+		pidConfig[2].fError_sum = 0;
 	}
 
 	return fOut;
@@ -289,51 +306,64 @@ float pidUpdateData2(float fSensorValue, float fSetValue)
 
 
 void vPIDMotorsOutput() {
-  fLeftActualPower =  pidUpdateData(dEncoderGetLeftWheelVelocity(), fLeftSetPoint);
+  fLeftActualPower =  pidUpdateData(dEncoderGetLeftWheelVelocity(), fLeftSetPoint, 0);
+  if(fLeftActualPower < 0) {
+	  fLeftActualPower = 0;
+  }
   vMotorsLeftPower(fLeftActualPower);
-  fRightActualPower = pidUpdateData(dEncoderGetRightWheelVelocity(), fRightSetPoint);
+  fRightActualPower = pidUpdateData(dEncoderGetRightWheelVelocity(), fRightSetPoint,1);
+  if(fRightActualPower < 0) {
+	  fRightActualPower = 0;
+  }
   vMotorsRightPower(fRightActualPower);
 }
 
 void vPIDLineFollowerOutput(float fDirection) {
 	fUpdate = pidUpdateData2(fDirection,0);
-	fLeftSetPoint = fVelSetPoint*(1- fUpdate);
-	fRightSetPoint = fVelSetPoint*(1 + fUpdate);
+	if (fUpdate < 0){
+		fLeftSetPoint = fVelSetPoint;
+		fRightSetPoint = fVelSetPoint*(1 + fUpdate);
+	}
+	else {
+		fLeftSetPoint = fVelSetPoint*(1 - fUpdate);
+		fRightSetPoint = fVelSetPoint;
+	}
+
 }
 
 void vPIDIncreaseKp() {
-	pidConfig2.fKp +=  0.05;
+	pidConfig[2].fKp +=  0.05;
 }
 
 void vPIDDecreaseKp(){
-	pidConfig2.fKp -= 0.05;
+	pidConfig[2].fKp -= 0.05;
 }
 
 void vPIDIncreaseKd() {
-	pidConfig2.fKd ++;
+	pidConfig[2].fKd ++;
 }
 
 void vPIDIncreaseKi() {
-	pidConfig2.fKi ++;
+	pidConfig[2].fKi ++;
 }
 
 void vPID2SetKp(float fKp){
-	pidConfig2.fKp = fKp;
+	pidConfig[2].fKp = fKp;
 }
 void vPID2SetKi(float fKi){
-	pidConfig2.fKi = fKi;
+	pidConfig[2].fKi = fKi;
 }
 void vPID2SetKd(float fKd) {
-	pidConfig2.fKd = fKd;
+	pidConfig[2].fKd = fKd;
 }
 float fPID2GetKp(){
-	return pidConfig2.fKp;
+	return pidConfig[2].fKp;
 }
 float fPID2GetKi(){
-	return pidConfig2.fKi;
+	return pidConfig[2].fKi;
 }
 float fPID2GetKd() {
-	return pidConfig2.fKd;
+	return pidConfig[2].fKd;
 }
 
 float fPIDGetVelSetPoint(){
