@@ -74,6 +74,7 @@ extern char cNextParam[17];
 int iINextParam = 0;
 extern char cFlagAll;
 extern char cState;
+char cCounter1s = 0;
 
 
 /* USER CODE END PV */
@@ -149,7 +150,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  if(cUpdateScreen){
-		  vLcdUpdateScreen(0);
+		  vLcdUpdateScreen();
 		  cUpdateScreen = 0;
 
 	  }
@@ -237,7 +238,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 		vEncoderOverflowCallback(htim);
 	} else if(htim == pOdometryTIM) {
 		vOdometryUpdateCurrentStatus();
-		cUpdateScreen = 1;
+		cCounter1s ++;
+		if(cCounter1s == 500) {
+			cCounter1s = 0;
+			cUpdateScreen = 1;
+		}
+
 	}else if(htim == xUltraSonicSensor.htim) {
 		vUltraSonicSensorOverclockCallback(htim);
 	}

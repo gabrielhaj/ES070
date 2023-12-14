@@ -44,7 +44,7 @@ typedef struct{
 }Lcd;
 
 /*LCD screens enumeration*/
-typedef enum {screen1,screen2,screen3,screen4} screens;
+typedef enum {screen1,screen2,screen3} screens;
 
 /* ************************************************ */
 /* Method name:        vLcdInitLcd                  */
@@ -115,7 +115,7 @@ void vLcdBackLightOff(void);
 /* Input params:       Actual screen                */
 /* Output params:      n/a                          */
 /* ************************************************ */
-void vLcdUpdateScreen(screens screen);
+void vLcdUpdateScreen();
 
 void vLcdDummyText(void);
 

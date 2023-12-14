@@ -19,6 +19,7 @@
 /* line and columns */
 #define LINE0		0U
 #define COLUMN0		0U
+#define PI 3.1415
 
 #define L0C0_BASE	0x80 /* line 0, column 0 */
 #define L1C0_BASE	0xC0 /* line 1, column 0 */
@@ -272,92 +273,67 @@ char* vFtoa(float fNum, unsigned char ucType){ //Colocar ucParam como global na 
 /* Input params:       Actual screen                */
 /* Output params:      n/a                          */
 /* ************************************************ */
-void vLcdUpdateScreen(screens screen){
+void vLcdUpdateScreen(){
 	char cLine1[16] = {0};
 	char cLine2[16] = {0};
 	char cAuxLine1[5] = {0};
 	char cAuxLine2[5] = {0};
+	xActualScreen++;
+	if(xActualScreen > screen3) {
+		xActualScreen = screen1;
+	}
 	//Clear screen, set cursor to lines
 	//Build strings and send them to lcd
-	switch(screen) {
+	switch(xActualScreen) {
 	  case screen1:
-		  if(cNewScreen) {
-			  vLcdSendCommand(CMD_CLEAR);
-			  vLcdSetCursor(0,0);
-			  strcat(cLine1,"Dist.P: ");
-			  strcat(cAuxLine1,vFtoa(xPosition.dTravelledDistance,'0'));
-			  strcat(cAuxLine1," m");
-			  strcat(cLine1,cAuxLine1);
-			  vLcdWriteString(cLine1);
-			  vLcdSetCursor(1,0);
-			  strcat(cLine2,"V.Atual:");
-			  strcat(cAuxLine2,vFtoa(xPosition.dActualVelocity,'0'));
-			  strcat(cAuxLine2," m/s");
-			  strcat(cLine2,cAuxLine2);
-			  vLcdWriteString(cLine2);
-			  cNewScreen = 0;
-		  } else {
-			  vLcdSetCursor(0,8);
-			  strcat(cAuxLine1,vFtoa(xPosition.dTravelledDistance,'0'));
-			  strcat(cAuxLine1," m");
-			  strcat(cLine1,cAuxLine1);
-			  vLcdSetCursor(1,8);
-			  strcat(cAuxLine2,vFtoa(xPosition.dActualVelocity,'0'));
-			  strcat(cAuxLine2,"v");
-			  strcat(cLine2,cAuxLine2);
-			  vLcdWriteString(cLine2);
-		  }
+		  vLcdSendCommand(CMD_CLEAR);
+		  vLcdSetCursor(0,0);
+		  strcat(cLine1,"Dist.Perc:");
+		  strcat(cAuxLine1,vFtoa(xPosition.dTravelledDistance,'0'));
+		  strcat(cAuxLine1,"m");
+		  strcat(cLine1,cAuxLine1);
+		  vLcdWriteString(cLine1);
+		  vLcdSetCursor(1,0);
+		  strcat(cLine2,"Posicao X:");
+		  strcat(cAuxLine2,vFtoa(xPosition.dXPostion,'0'));
+		  strcat(cAuxLine2,"m");
+		  strcat(cLine2,cAuxLine2);
+		  vLcdWriteString(cLine2);
+		  cNewScreen = 0;
+		  break;
+	  case screen2:
+		  vLcdSendCommand(CMD_CLEAR);
+		  vLcdSetCursor(0,0);
+		  strcat(cLine1,"Posicao Y");
+		  strcat(cAuxLine1,vFtoa(xPosition.dYPostion,'0'));
+		  strcat(cAuxLine1,"m");
+		  strcat(cLine1,cAuxLine1);
+		  vLcdWriteString(cLine1);
+		  vLcdSetCursor(1,0);
+		  strcat(cLine2,"Posicao Ang:");
+		  strcat(cAuxLine2,vFtoa(xPosition.dThetaPosition*180/PI,'h'));
+		  strcat(cAuxLine2,"º");
+		  strcat(cLine2,cAuxLine2);
+		  vLcdWriteString(cLine2);
+		  cNewScreen = 0;
 
 		  break;
-//	  case screen2:
-//		  if(cNewScreen) {
-//			  vLcdSendCommand(CMD_CLEAR);
-//			  vLcdSetCursor(0,0);
-//			  strcat(cLine1,"Vel.Media.:");
-//			  strcat(cAuxLine1,vFtoa(xPosition.dMeanVelocity,'0'));
-//			  strcat(cAuxLine1," m/s");
-//			  strcat(cLine1,cAuxLine1);
-//			  vLcdWriteString(cLine1);
-//			  vLcdSetCursor(1,0);
-//			  strcat(cLine2,"X:");
-//			  strcat(cAuxLine2,vFtoa(xPosition.dMeanVelocity,'0'));
-//			  strcat(cAuxLine2,"v");
-//			  strcat(cLine2,cAuxLine2);
-//			  vLcdWriteString(cLine2);
-//			  cNewScreen = 0;
-//		  } else {
-//			  vLcdSetCursor(0,6);
-//			  strcat(cAuxLine1,vFtoa(xPosition.dTravelledDistance,'0'));
-//			  strcat(cAuxLine1,"m");
-//			  strcat(cLine1,cAuxLine1);
-//			  vLcdSetCursor(1,8);
-//			  strcat(cAuxLine2,vFtoa(xPosition.dMeanVelocity,'0'));
-//			  strcat(cAuxLine2,"v");
-//			  strcat(cLine2,cAuxLine2);
-//			  vLcdWriteString(cLine2);
-//		  }
-//
-//		  break;
-//	  case screen3:
-//		  vLcdSendCommand(CMD_CLEAR);
-//		  vLcdSetCursor(0,0);
-//		  strcat(cLine1,"Kp:");
-//		  strcat(cLine1,vFtoa(pid_getKp(),'0'));
-//		  vLcdWriteString(cLine1);
-//		  vLcdSetCursor(1,0);
-//		  strcat(cLine2,"Ki:");
-//		  strcat(cLine2,vFtoa(pid_getKi(),'0'));
-//		  vLcdWriteString(cLine2);
-//		  break;
-//	  case screen4:
-//		  vLcdSendCommand(CMD_CLEAR);
-//		  vLcdSetCursor(0,0);
-//		  strcat(cLine1,"Cooler Speed:");
-//		  vLcdWriteString(cLine1);
-//		  vLcdSetCursor(1,0);
-//		  sprintf(cLine2,"%d RPM",usCoolerSpeed);
-//		  vLcdWriteString(cLine2);
-//		  break;
+	  case screen3:
+		  vLcdSendCommand(CMD_CLEAR);
+		  vLcdSetCursor(0,0);
+		  strcat(cLine1,"Bateria :");
+		  strcat(cAuxLine1,vFtoa(xPosition.dThetaPosition*180/PI,'h'));
+		  strcat(cAuxLine1,"%");
+		  strcat(cLine1,cAuxLine1);
+		  vLcdWriteString(cLine1);
+		  vLcdSetCursor(1,0);
+		  strcat(cLine2,"V.media:");
+		  strcat(cAuxLine2,vFtoa(xPosition.dMeanVelocity*100,'h'));
+		  strcat(cAuxLine2,"cm/s");
+		  strcat(cLine2,cAuxLine2);
+		  vLcdWriteString(cLine2);
+		  cNewScreen = 0;
+		  break;
  }
 }
 
