@@ -120,6 +120,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
 #define T_SWDIO_GPIO_Port GPIOA
 #define T_SWCLK_Pin GPIO_PIN_14
 #define T_SWCLK_GPIO_Port GPIOA
+#define FrontalSW_Pin GPIO_PIN_2
+#define FrontalSW_GPIO_Port GPIOD
 #define T_SWO_Pin GPIO_PIN_3
 #define T_SWO_GPIO_Port GPIOB
 #define LeftWheelEnc_Pin GPIO_PIN_4
