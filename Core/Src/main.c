@@ -74,7 +74,7 @@ extern char cNextParam[17];
 int iINextParam = 0;
 extern char cFlagAll;
 extern char cState;
-char cCounter1s = 0;
+int iCounter1s = 0;
 
 
 /* USER CODE END PV */
@@ -238,9 +238,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 		vEncoderOverflowCallback(htim);
 	} else if(htim == pOdometryTIM) {
 		vOdometryUpdateCurrentStatus();
-		cCounter1s ++;
-		if(cCounter1s == 500) {
-			cCounter1s = 0;
+		iCounter1s ++;
+		if(iCounter1s == 300) {
+			iCounter1s = 0;
 			cUpdateScreen = 1;
 		}
 

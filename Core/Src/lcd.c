@@ -33,7 +33,7 @@ extern pid_data_type pidConfig2;
 Lcd xLcd = {0};
 char cBackLight = 1;
 screens xScreen = 0;
-screens xActualScreen = 0;
+screens xActualScreen = 4;
 char cStr[6] = {0};
 extern positionStruct xPosition;
 char cNewScreen = 1;
@@ -277,7 +277,7 @@ void vLcdUpdateScreen(){
 	char cLine1[16] = {0};
 	char cLine2[16] = {0};
 	char cAuxLine1[5] = {0};
-	char cAuxLine2[5] = {0};
+	char cAuxLine2[6] = {0};
 	xActualScreen++;
 	if(xActualScreen > screen3) {
 		xActualScreen = screen1;
@@ -304,7 +304,7 @@ void vLcdUpdateScreen(){
 	  case screen2:
 		  vLcdSendCommand(CMD_CLEAR);
 		  vLcdSetCursor(0,0);
-		  strcat(cLine1,"Posicao Y");
+		  strcat(cLine1,"Posicao Y:");
 		  strcat(cAuxLine1,vFtoa(xPosition.dYPostion,'0'));
 		  strcat(cAuxLine1,"m");
 		  strcat(cLine1,cAuxLine1);
@@ -321,7 +321,7 @@ void vLcdUpdateScreen(){
 	  case screen3:
 		  vLcdSendCommand(CMD_CLEAR);
 		  vLcdSetCursor(0,0);
-		  strcat(cLine1,"Bateria :");
+		  strcat(cLine1,"Bateria:");
 		  strcat(cAuxLine1,vFtoa(xPosition.dThetaPosition*180/PI,'h'));
 		  strcat(cAuxLine1,"%");
 		  strcat(cLine1,cAuxLine1);
@@ -329,7 +329,7 @@ void vLcdUpdateScreen(){
 		  vLcdSetCursor(1,0);
 		  strcat(cLine2,"V.media:");
 		  strcat(cAuxLine2,vFtoa(xPosition.dMeanVelocity*100,'h'));
-		  strcat(cAuxLine2,"cm/s");
+		  strcat(cAuxLine2," cm/s");
 		  strcat(cLine2,cAuxLine2);
 		  vLcdWriteString(cLine2);
 		  cNewScreen = 0;
