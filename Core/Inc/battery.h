@@ -8,12 +8,12 @@
 #ifndef INC_BATTERY_H_
 #define INC_BATTERY_H_
 #include "adc.h"
-#include "opamp.h"
+//#include "opamp.h"
 #include "dma.h"
 
 void vBatteryInit(ADC_HandleTypeDef *hadc);
 
-float fBatteryGetMeanVoltage(void);
+float fBatteryGetPercentage(void);
 
 float fBatteryGetVoltage(void);
 

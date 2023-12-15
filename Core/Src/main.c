@@ -22,7 +22,6 @@
 #include "dma.h"
 #include "i2c.h"
 #include "usart.h"
-#include "opamp.h"
 #include "tim.h"
 #include "gpio.h"
 
@@ -76,7 +75,7 @@ int catchaE = 0;
 uint16_t usBattery;
 extern ADC_HandleTypeDef hadc2;
 extern DMA_HandleTypeDef hdma_adc2;
-extern OPAMP_HandleTypeDef hopamp2;
+//extern OPAMP_HandleTypeDef hopamp2;
 float fVoltage = 0;
 
 
@@ -133,7 +132,6 @@ int main(void)
   MX_TIM20_Init();
   MX_TIM8_Init();
   MX_ADC2_Init();
-  MX_OPAMP2_Init();
   /* USER CODE BEGIN 2 */
   vInitEncoders(&htim16,&htim17);
   vMotorsInit(&htim1);
@@ -162,7 +160,7 @@ int main(void)
 
 	  }
 
-
+	  fVoltage= fBatteryGetVoltage();
 
 
   }

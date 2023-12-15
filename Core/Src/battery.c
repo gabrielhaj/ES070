@@ -7,7 +7,7 @@
 
 
 #include "battery.h"
-#include "opamp.h"
+//#include "opamp.h"
 #include "adc.h"
 #include "dma.h"
 
@@ -23,22 +23,20 @@ void vBatteryInit(ADC_HandleTypeDef *hadc){
 	HAL_ADCEx_Calibration_Start(hadc, ADC_SINGLE_ENDED);
 	//HAL_ADC_Start(hadc);
 	HAL_ADC_Start_DMA(&hadc2, &usBattery, 1);
-	HAL_OPAMP_Start(&hopamp2);
+	//HAL_OPAMP_Start(&hopamp2);
 }
 
-float fBatteryGetMeanVoltage(void){
-	/*int i;
-	fVoltageSum = 0;
-	for (i = 0; i < BUFFERSIZE; i++) {
-		fVoltageSum = fVoltageSum + uiVoltageBuffer[i];
-	}
-	return fVoltageSum/BUFFERSIZE;*/
+float fBatteryGetPercentage(void){
+	float fMin = 6.7;
+	float fMax = 9.4;
+	float fRange = fMax - fMin;
+	return (fMax - fBatteryGetVoltage())/fRange;
+
 }
 
 
 float fBatteryGetVoltage(void) {
 	//return  3.3*fBatteryGetMeanVoltage()/((2^12)-1);
-	//*133/33
-	return 3.3*usBattery/((2^12) - 1);
+	return (float)usBattery/209.0;
 }
 

@@ -90,8 +90,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
 #define LD2_GPIO_Port GPIOA
 #define LightSensor2_Pin GPIO_PIN_6
 #define LightSensor2_GPIO_Port GPIOA
-#define Bateria_AD_Pin GPIO_PIN_7
-#define Bateria_AD_GPIO_Port GPIOA
 #define EnterBt_Pin GPIO_PIN_5
 #define EnterBt_GPIO_Port GPIOC
 #define EnterBt_EXTI_IRQn EXTI9_5_IRQn
