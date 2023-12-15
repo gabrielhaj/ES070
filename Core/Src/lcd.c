@@ -13,6 +13,7 @@
 #include "string.h"
 #include "i2c.h"
 #include "odometry.h"
+#include "battery.h"
 
 
 
@@ -327,7 +328,7 @@ void vLcdUpdateScreen(){
 		  vLcdSendCommand(CMD_CLEAR);
 		  vLcdSetCursor(0,0);
 		  strcat(cLine1,"Bateria:");
-		  strcat(cAuxLine1,vFtoa(xPosition.dThetaPosition*180/PI,'h'));
+		  strcat(cAuxLine1,vFtoa(fBatteryGetPercentage(),'t'));
 		  strcat(cAuxLine1,"%");
 		  strcat(cLine1,cAuxLine1);
 		  vLcdWriteString(cLine1);

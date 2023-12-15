@@ -14,6 +14,7 @@
 #include "odometry.h"
 #include "lineFollower.h"
 #include "manual.h"
+#include "battery.h"
 //Possible states of the state machine
 #define IDDLE '0'
 #define READY '1'
@@ -240,7 +241,7 @@ void vReturnParam(unsigned char ucParamReturn) {
 		case 'b':
 			sData[2] = ucParamReturn;
 			strcat(sMessage,sData);
-			strcat(sMessage,"00,00");
+			strcat(sMessage,vFtoa(fBatteryGetPercentage(),'t'));
 			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
