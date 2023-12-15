@@ -22,9 +22,9 @@ void vUltrasonicSensorInit(TIM_HandleTypeDef *htim) {
 	xUltraSonicSensor.uiReceiveTime = 0;
 	xUltraSonicSensor.uiOVC = 0;
 	HAL_TIM_Base_Start_IT(xUltraSonicSensor.htim);
-    HAL_TIM_IC_Start_IT(xUltraSonicSensor.htim, TIM_CHANNEL_1);
+    HAL_TIM_IC_Start_IT(xUltraSonicSensor.htim, TIM_CHANNEL_2);
     __HAL_TIM_SET_COUNTER(&htim3, 0);
-	HAL_TIM_PWM_Start(pPWMTrigger,TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(pPWMTrigger,TIM_CHANNEL_2);
 	pPWMTrigger->Instance->CCR1 = 1;
 
 }
@@ -63,12 +63,12 @@ double dUltrasonicSensorGetDistanceCm(ultraSonicSensorStruct xUltraSonicSensor) 
 void vUltraSonicSensorCallback(TIM_HandleTypeDef *htim) {
 	if (cFlag == 0) {
 		//Utilizamos o CCR2 porque é o do sensor frontal
-		xUltraSonicSensor.uiSendTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1); // tempo inicial
+		xUltraSonicSensor.uiSendTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_2); // tempo inicial
 		xUltraSonicSensor.uiOVC = 0;
 		cFlag = 1;
 		//vUltrasonicSensorSendTriggerPulse(htim);
 	} else {
-		xUltraSonicSensor.uiReceiveTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1); // tempo final
+		xUltraSonicSensor.uiReceiveTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_2); // tempo final
 	    __HAL_TIM_SET_COUNTER(&htim3, 0);
 		xUltraSonicSensor.dDistance = dUltrasonicSensorGetDistanceCm(xUltraSonicSensor);
 		cFlag = 0;
