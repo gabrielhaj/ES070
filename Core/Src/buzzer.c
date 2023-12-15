@@ -36,3 +36,4 @@ void vBuzzerStop(void) {
   HAL_TIM_PWM_Stop(pBuzzer, TIM_CHANNEL_1);
 }
 
+

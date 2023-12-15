@@ -25,8 +25,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "encoder.h"
+#include "ultraSonicSensor.h"
 #include "lcd.h"
-
+#include "FrontalSW.h"
 
 
 /* USER CODE END Includes */
@@ -75,6 +77,7 @@ int iINextParam = 0;
 extern char cFlagAll;
 extern char cState;
 int iCounter1s = 0;
+char cBuzzer = 0;
 
 
 /* USER CODE END PV */
@@ -138,7 +141,7 @@ int main(void)
   pid_init2(0.4, 0, 0, 0, 1, 1);
   vUltrasonicSensorInit(&htim3);
   vLcdInitLcd(&hi2c2,ucLcdAddress);
-  vBuzzerConfig(1000, 100, &htim8);
+  vBuzzerConfig(100, 100, &htim8);
 
   /* USER CODE END 2 */
 
@@ -220,7 +223,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 		  //vBuzzerPlay();
 		} else if (xUltraSonicSensor.dDistance < 15) {
 			vMotorsStop();
-			vBuzzerStop();
+
 		}
 	}
 }
@@ -242,6 +245,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 		if(iCounter1s == 300) {
 			iCounter1s = 0;
 			cUpdateScreen = 1;
+		} else if((!(iCounter1s % 50)) && cBuzzer) {
+			vBuzzerPlay();
+		} else if(!(iCounter1s % 110) && cBuzzer) {
+			vBuzzerStop();
 		}
 
 	}else if(htim == xUltraSonicSensor.htim) {
@@ -250,10 +257,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	GPIO_PinState SW = SWRead();
 	xBt = xReadButtons();
-	if(xBt.enterBt) {
+	if (SW){
+
+		vMotorsStop();
+	}
+	else if(xBt.enterBt) {
+		cBuzzer = 1;
 		//b = 0;
 	} else if(xBt.downBt) {
+		cBuzzer = 0;
 		vPIDDecreaseKp();
 		b = b - 0.1;
 	} else if(xBt.upBt) {
