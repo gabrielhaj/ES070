@@ -255,12 +255,17 @@ char* vFtoa(float fNum, unsigned char ucType){ //Colocar ucParam como global na 
 		iInt = (int)fNum;
 		sprintf(cStr, "%d", iInt);
 		return cStr;
-	} else {
+	} else if(ucType == 't') {
+		iInt = (int)fNum;
+		sprintf(cStr, "%02d", iInt);
+		return cStr;
+	}else {
 		iInt = (int)fNum;
 		iDec = (int)((fNum - iInt)*100);
 		sprintf(cStr, "%02d,%02d", iInt, iDec);
 		return cStr;
 	}
+
 
 }
 

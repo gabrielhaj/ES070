@@ -230,7 +230,7 @@ void vReturnParam(unsigned char ucParamReturn) {
 		case 't':
 			sData[2] = ucParamReturn;
 			strcat(sMessage,sData);
-			strcat(sMessage,vFtoa(dOdometryGetThetaCoordinate(), 'o'));
+			strcat(sMessage,vFtoa(dOdometryGetThetaCoordinate()*180/PI, 't'));
 			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
@@ -330,7 +330,7 @@ void vReturnParam(unsigned char ucParamReturn) {
 		case 'h':
 			sData[2] = ucParamReturn;
 			strcat(sMessage,sData);
-			strcat(sMessage,vFtoa(fPIDGetVelSetPoint()/100,'o'));
+			strcat(sMessage,vFtoa(fPIDGetVelSetPoint()*100,'o'));
 			strcat(sMessage,sData2);
 			while(sMessage[iSize] != '\0'){
 				iSize ++;
@@ -387,7 +387,7 @@ void vSetParam(unsigned char ucParamSet, char* cValue){
 			vPID2SetKd(atof(cValue));
 			break;
 		case 'h':
-			fVelSetPoint = atof(cValue);
+			fVelSetPoint = atof(cValue)/100;
 			break;
 		case 'z':
 			vMotorsSetState(atof(cValue));

@@ -45,7 +45,7 @@ void vOdometryUpdateCurrentStatus(){
 	xPosition.dThetaPosition +=  dDTheta;
 	if(xPosition.dThetaPosition > 2*PI) {
 		xPosition.dThetaPosition -= 2*PI;
-	} else if(xPosition.dThetaPosition < 2*PI) {
+	} else if(xPosition.dThetaPosition < -2*PI) {
 		xPosition.dThetaPosition += 2*PI;
 	}
 	xPosition.dActualVelocity = (dRightVel+dLeftVel)/2;
