@@ -396,15 +396,15 @@ void vSetParam(unsigned char ucParamSet, char* cValue){
 			vLineFollowerSetState(atof(cValue));
 			break;
 		case 'f':
-			if(cValue) {
+			if(*cValue == '1') {
 				vBuzzerPlay();
-			} else {
+			} else if(*cValue == '0') {
 				vBuzzerStop();
 			}
 
 			break;
 		case 'F':
-			vManualBackward(*cValue);
+			vManualFoward(*cValue);
 			break;
 		case 'B':
 			vManualBackward(*cValue);

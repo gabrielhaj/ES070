@@ -27,9 +27,9 @@ void vBuzzerConfig(unsigned short int usFrequency, unsigned short int usPeriod, 
 
 void vBuzzerPlay(void){ //If you press button Enter, enters in this function
 //	//HAL_TIM_Base_Start_IT(pCounterBuzzer);
-//	HAL_TIM_PWM_Start(pBuzzer, TIM_CHANNEL_1);
-//	pBuzzer->Instance->CCR1 = (uint32_t)(0.5*1000);
-//	pBuzzer->Instance->ARR = (uint32_t)(usBuzzerFrequency);
+	HAL_TIM_PWM_Start(pBuzzer, TIM_CHANNEL_1);
+	pBuzzer->Instance->CCR1 = (uint32_t)(0.5*1000);
+	pBuzzer->Instance->ARR = (uint32_t)(usBuzzerFrequency);
 }
 
 void vBuzzerStop(void) {

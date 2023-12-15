@@ -220,11 +220,11 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 	}
 	else if(htim == xUltraSonicSensor.htim){
 		vUltraSonicSensorCallback(htim);
-		if(xUltraSonicSensor.dDistance < 20) {
-			cLigaBuzzer = 1;
-		} else if (xUltraSonicSensor.dDistance < 15) {
+		if (xUltraSonicSensor.dDistance < 15) {
 			vMotorsStop();
 			cLigaBuzzer = 0;
+		}else if(xUltraSonicSensor.dDistance < 20) {
+			cLigaBuzzer = 1;
 		} else {
 				cLigaBuzzer = 0;
 		}
@@ -259,6 +259,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 				vBuzzerPlay();
 				cStatusBuzzer = 1;
 			}
+		} else if(cStatusBuzzer && cLigaBuzzer == 0) {
+			vBuzzerStop();
 		}
 
 	}else if(htim == xUltraSonicSensor.htim) {

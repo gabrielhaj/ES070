@@ -306,12 +306,20 @@ float pidUpdateData2(float fSensorValue, float fSetValue)
 
 
 void vPIDMotorsOutput() {
-  fLeftActualPower =  pidUpdateData(dEncoderGetLeftWheelVelocity(), fLeftSetPoint, 0);
+  if(fLeftSetPoint == 0) {
+	  fLeftActualPower = 0;
+  } else {
+	  fLeftActualPower =  pidUpdateData(dEncoderGetLeftWheelVelocity(), fLeftSetPoint, 0);
+  }
   if(fLeftActualPower < 0) {
 	  fLeftActualPower = 0;
   }
   vMotorsLeftPower(fLeftActualPower);
-  fRightActualPower = pidUpdateData(dEncoderGetRightWheelVelocity(), fRightSetPoint,1);
+  if(fRightSetPoint == 0) {
+	  fRightActualPower = 0;
+  } else {
+	  fRightActualPower = pidUpdateData(dEncoderGetRightWheelVelocity(), fRightSetPoint,1);
+  }
   if(fRightActualPower < 0) {
 	  fRightActualPower = 0;
   }

@@ -135,32 +135,37 @@ void vLineFollowerStop() {
 
 void vLineFollowerNewTracker(lineSensorsStateStruct xS) {
 	if(xS.leftSensor == white && xS.mostLeftSensor == white && xS.rightSensor == white && xS.mostRightSensor == white && xS.middleSensor == white ) {
-//		if(cCounter > ((4*0.01)/xPosition.dActualVelocity)/(0.01)) {//espessura da faixa e ciclo do clock
-//			dOrientationChange = 0;
-//			fVelSetPoint = 0;
-//			vOdometryInverseKinematics(dOrientationChange, fVelSetPoint);
-//		}
-//		cCounter ++;
+		if(cCounter > ((4*0.01)/xPosition.dActualVelocity)/(0.01)) {//espessura da faixa e ciclo do clock
+			dOrientationChange = 0;
+			fVelSetPoint = 0;
+			vOdometryInverseKinematics(dOrientationChange, fVelSetPoint);
+		}
+		cCounter ++;
 	} else if(xS.mostLeftSensor == white) {
 		//dOrientationChange = 2*(PI/180)*SENSORANGLE;
 		//vOdometryInverseKinematics(dOrientationChange, fVelSetPoint);
 		vPIDLineFollowerOutput(-2);
+		cCounter = 0;
 	} else if(xS.mostRightSensor == white) {
 		//dOrientationChange = -2*(PI/180)*SENSORANGLE;
 		//vOdometryInverseKinematics(dOrientationChange, fVelSetPoint);
 		vPIDLineFollowerOutput(2);
+		cCounter = 0;
 	} else if(xS.leftSensor == white) {
 		//dOrientationChange = (PI/180)*SENSORANGLE;
 		//vOdometryInverseKinematics(dOrientationChange, fVelSetPoint);
 		vPIDLineFollowerOutput(-1);
+		cCounter = 0;
 	} else if(xS.rightSensor == white) {
 		//dOrientationChange = -1*(PI/180)*SENSORANGLE;
 		//vOdometryInverseKinematics(dOrientationChange, fVelSetPoint);
 		vPIDLineFollowerOutput(1);
+		cCounter = 0;
 	} else if(xS.middleSensor == white) {
 		//dOrientationChange = 0;
 		//vOdometryInverseKinematics(dOrientationChange, fVelSetPoint);
 		vPIDLineFollowerOutput(0);
+		cCounter = 0;
 		//to-do
 	}
 //	else {
