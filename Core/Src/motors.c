@@ -42,7 +42,7 @@ void vMotorsLeftPower(float fLeftPower){
 		fLeftPower *= -1;
 		vMotorsLeftWheelBackwards();
 	} else if(fLeftPower < -1) {
-		fLeftPower = 1;
+		fLeftPower = -1;
 		vMotorsLeftWheelBackwards();
 	}
 	pPWMMotors->Instance->CCR1 = (uint32_t)(fLeftPower*pPWMMotors->Instance->ARR);
@@ -58,7 +58,7 @@ void vMotorsRightPower(float fRightPower){
 		fRightPower *= -1;
 		vMotorsRightWheelBackwards();
 	} else if(fRightPower < -1) {
-		fRightPower = 1;
+		fRightPower = -1;
 		vMotorsRightWheelBackwards();
 	}
 	pPWMMotors->Instance->CCR2 = (uint32_t)(fRightPower*pPWMMotors->Instance->ARR);

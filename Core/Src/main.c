@@ -77,7 +77,8 @@ int iINextParam = 0;
 extern char cFlagAll;
 extern char cState;
 int iCounter1s = 0;
-char cBuzzer = 0;
+char cStatusBuzzer = 0;
+char cLigaBuzzer = 0;
 
 
 /* USER CODE END PV */
@@ -141,7 +142,7 @@ int main(void)
   pid_init2(0.4, 0, 0, 0, 1, 1);
   vUltrasonicSensorInit(&htim3);
   vLcdInitLcd(&hi2c2,ucLcdAddress);
-  vBuzzerConfig(100, 100, &htim8);
+  vBuzzerConfig(900, 100, &htim8);
 
   /* USER CODE END 2 */
 
@@ -220,10 +221,12 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 	else if(htim == xUltraSonicSensor.htim){
 		vUltraSonicSensorCallback(htim);
 		if(xUltraSonicSensor.dDistance < 20) {
-		  //vBuzzerPlay();
+			cLigaBuzzer = 1;
 		} else if (xUltraSonicSensor.dDistance < 15) {
 			vMotorsStop();
-
+			cLigaBuzzer = 0;
+		} else {
+				cLigaBuzzer = 0;
 		}
 	}
 }
@@ -245,10 +248,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 		if(iCounter1s == 300) {
 			iCounter1s = 0;
 			cUpdateScreen = 1;
-		} else if((!(iCounter1s % 50)) && cBuzzer) {
-			vBuzzerPlay();
-		} else if(!(iCounter1s % 110) && cBuzzer) {
-			vBuzzerStop();
+		}
+
+		if((!(iCounter1s % 100)) && cLigaBuzzer) {
+			if (cStatusBuzzer){
+				vBuzzerStop();
+				cStatusBuzzer = 0;
+			}
+			else {
+				vBuzzerPlay();
+				cStatusBuzzer = 1;
+			}
 		}
 
 	}else if(htim == xUltraSonicSensor.htim) {
@@ -264,10 +274,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 		vMotorsStop();
 	}
 	else if(xBt.enterBt) {
-		cBuzzer = 1;
+		//cLigaBuzzer = 1;
 		//b = 0;
 	} else if(xBt.downBt) {
-		cBuzzer = 0;
+		cLigaBuzzer = 0;
 		vPIDDecreaseKp();
 		b = b - 0.1;
 	} else if(xBt.upBt) {

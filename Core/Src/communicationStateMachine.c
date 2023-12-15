@@ -46,7 +46,7 @@ static char cValue[MAX_VALUE_LENGHT+1];
 char sMessage[MAX_VALUE_LENGHT + 5 + 2] = {0};
 
 //The beggining of the answer string
-char sData[5] = {"-A  \0"};
+char sData[5] = {"-A \0"};
 
 //The end of the answer string
 char sData2[2] = {"!\0"};
@@ -70,6 +70,9 @@ extern float a;
 extern float fLeftSetPoint;
 extern float fRightSetPoint;
 extern float fVelSetPoint;
+
+extern char cLigaBuzzer;
+
 
 /* ************************************************************************************* */
 /* Method name:        vCommunicationStateMachineProcessStateMachine                     */
@@ -393,7 +396,12 @@ void vSetParam(unsigned char ucParamSet, char* cValue){
 			vLineFollowerSetState(atof(cValue));
 			break;
 		case 'f':
-			vBuzzerPlay();
+			if(cValue) {
+				vBuzzerPlay();
+			} else {
+				vBuzzerStop();
+			}
+
 			break;
 		case 'F':
 			vManualBackward(*cValue);
